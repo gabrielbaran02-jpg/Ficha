@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Shinobi no Sekai — Ficha</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+:root,[data-theme="dark"]{
+  --bg:#0a0c10;--surface:#10141c;--surface2:#161b26;--surface3:#1c2333;
+  --border:#1e2d4a;--border-bright:#2a4070;
+  --header-bg:linear-gradient(135deg,#0a0e18,#0d1525,#0a0e18);
+  --accent:#3a7bd5;--accent2:#5b9bd5;--accent-glow:rgba(58,123,213,0.25);
+  --text:#ccd6f0;--text-dim:#7a8aaa;--text-bright:#e8f0ff;
+  --danger:#e05a5a;--success:#4aaa7a;--gold:#c8a840;
+  --chakra:#6a5acd;--chakra-bright:#9a7aff;--hp:#c44455;--hp-bright:#ff6070;
+  --shadow:rgba(0,0,0,0.6);
+  --dice-bg:#0d1320;--dice-face:#1a2540;--dice-border:#2a4070;--dice-text:#e8f0ff;--dice-result-bg:#0a1020;
+}
+[data-theme="light"]{
+  --bg:#f0f4fa;--surface:#ffffff;--surface2:#eef2fa;--surface3:#e2e8f5;
+  --border:#c8d4ec;--border-bright:#94aad8;
+  --header-bg:linear-gradient(135deg,#1a3a7a,#2a5aaa,#1a3a7a);
+  --accent:#2060c8;--accent2:#1a50b8;--accent-glow:rgba(32,96,200,0.15);
+  --text:#1a2a50;--text-dim:#5a6a90;--text-bright:#0a1a40;
+  --danger:#cc3030;--success:#228844;--gold:#a07010;
+  --chakra:#5040b0;--chakra-bright:#7060d0;--hp:#b03040;--hp-bright:#e04050;
+  --shadow:rgba(0,0,40,0.15);
+  --dice-bg:#e8eef8;--dice-face:#dce4f4;--dice-border:#94aad8;--dice-text:#0a1a40;--dice-result-bg:#d8e4f8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;min-height:100vh;transition:background .3s,color .3s;}
+#app-header{background:var(--header-bg);border-bottom:2px solid var(--accent);padding:10px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px var(--shadow);}
+#app-header h1{font-family:'Cinzel',serif;font-size:17px;color:#fff;letter-spacing:3px;text-transform:uppercase;}
+#app-header .sub{font-size:10px;color:rgba(255,255,255,.6);letter-spacing:2px;}
+.header-actions{margin-left:auto;display:flex;gap:8px;align-items:center;}
+.theme-toggle{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;color:#fff;display:flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap;}
+.theme-toggle:hover{background:rgba(255,255,255,.2);}
+#tabs{display:flex;gap:2px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 12px;overflow-x:auto;}
+#tabs::-webkit-scrollbar{height:3px;}#tabs::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px;}
+.tab-btn{padding:10px 18px;background:none;border:none;color:var(--text-dim);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.tab-btn:hover{color:var(--accent2);}.tab-btn.active{color:var(--accent2);border-bottom-color:var(--accent);}
+.panel{display:none;padding:16px;}.panel.active{display:block;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:6px 6px 0 0;}
+.card-title{font-family:'Cinzel',serif;font-size:10px;color:var(--accent2);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;opacity:.85;}
+input[type=text],input[type=number],textarea,select{background:var(--surface3);border:1px solid var(--border);color:var(--text-bright);border-radius:4px;padding:6px 10px;font-family:'Rajdhani',sans-serif;font-size:14px;width:100%;transition:border-color .2s;outline:none;}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow);}
+textarea{resize:vertical;min-height:80px;line-height:1.5;}
+label{display:block;font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:4px;text-transform:uppercase;}
+.field{margin-bottom:10px;}
+.btn{background:linear-gradient(135deg,var(--accent),#2a5aaa);border:none;color:#fff;padding:7px 16px;border-radius:4px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+.btn:hover{filter:brightness(1.2);transform:translateY(-1px);}
+.btn-sm{padding:4px 10px;font-size:12px;}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#a03030);}
+.btn-success{background:linear-gradient(135deg,var(--success),#2a7a50);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#806010);color:#fff;}
+.btn-ghost{background:transparent;border:1px solid var(--border-bright);color:var(--text-dim);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent2);}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center;}
+.stat-box .stat-label{font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px;}
+.stat-box .stat-value{font-size:28px;font-weight:700;font-family:'Share Tech Mono',monospace;color:var(--text-bright);line-height:1;}
+.stat-box input[type=number]{background:none;border:none;text-align:center;font-size:28px;font-weight:700;font-family:'Share Tech Mono',monospace;color:var(--text-bright);width:100%;padding:0;}
+.resource-bar{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;}
+.resource-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.resource-name{font-size:11px;letter-spacing:2px;text-transform:uppercase;}
+.resource-name.hp{color:var(--hp-bright);}.resource-name.chakra{color:var(--chakra-bright);}
+.resource-values{display:flex;gap:6px;align-items:center;}
+.resource-values input{width:60px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:16px;}
+.resource-values span{color:var(--text-dim);}
+.bar-track{height:8px;background:var(--surface3);border-radius:4px;overflow:hidden;margin-top:4px;}
+.bar-fill{height:100%;border-radius:4px;transition:width .3s;}
+.bar-fill.hp{background:linear-gradient(90deg,var(--hp),var(--hp-bright));}
+.bar-fill.chakra{background:linear-gradient(90deg,var(--chakra),var(--chakra-bright));}
+.xp-display{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;}
+.level-big{font-family:'Cinzel',serif;font-size:52px;font-weight:700;color:var(--gold);text-align:center;line-height:1;text-shadow:0 0 20px rgba(200,168,64,.4);}
+.xp-info{text-align:center;font-size:12px;color:var(--text-dim);margin-top:4px;}
+.xp-bar-track{height:10px;background:var(--surface3);border-radius:5px;overflow:hidden;margin:8px 0;}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),#e8c84a);border-radius:5px;transition:width .4s;}
+.xp-total{font-family:'Share Tech Mono';font-size:20px;color:var(--gold);text-align:center;}
+.xp-log{max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:4px;background:var(--surface3);}
+.xp-entry{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+.xp-entry:last-child{border-bottom:none;}
+.xp-entry .xp-amount{font-family:'Share Tech Mono';color:var(--gold);font-weight:700;}
+.xp-entry .xp-date{font-size:11px;color:var(--text-dim);}
+.xp-entry .xp-desc{flex:1;margin:0 12px;}
+.poder-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;}
+.poder-row label{width:90px;flex-shrink:0;font-size:11px;}
+.poder-row input{flex:1;}
+/* DICE */
+.dice-panel{background:var(--dice-bg);border:1px solid var(--dice-border);border-radius:8px;padding:16px;}
+.dice-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.die-btn{background:var(--dice-face);border:2px solid var(--dice-border);border-radius:8px;color:var(--dice-text);font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;padding:10px 16px;cursor:pointer;transition:all .15s;letter-spacing:1px;min-width:60px;text-align:center;}
+.die-btn:hover{border-color:var(--accent);color:var(--accent2);transform:translateY(-2px);box-shadow:0 4px 12px var(--accent-glow);}
+.die-btn:active{transform:translateY(0) scale(.95);}
+.die-btn.rolling{animation:diceRoll .4s ease;}
+@keyframes diceRoll{0%{transform:rotate(0) scale(1);}25%{transform:rotate(-15deg) scale(1.1);}50%{transform:rotate(15deg) scale(1.1);}75%{transform:rotate(-8deg) scale(1.05);}100%{transform:rotate(0) scale(1);}}
+.dice-modifiers{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.dice-modifiers label{width:auto;white-space:nowrap;}
+.mod-input{width:70px!important;text-align:center;}
+.dice-qty-input{width:55px!important;text-align:center;}
+.dice-result-area{background:var(--dice-result-bg);border:1px solid var(--dice-border);border-radius:6px;padding:14px;min-height:80px;}
+.dice-result-main{font-family:'Share Tech Mono',monospace;font-size:40px;font-weight:700;color:var(--gold);text-align:center;line-height:1;text-shadow:0 0 12px rgba(200,168,64,.5);transition:all .2s;}
+.dice-result-detail{font-size:12px;color:var(--text-dim);text-align:center;margin-top:6px;font-family:'Share Tech Mono',monospace;}
+.dice-result-mod{font-size:13px;color:var(--accent2);text-align:center;margin-top:4px;}
+.dice-history-list{max-height:200px;overflow-y:auto;background:var(--surface3);border:1px solid var(--border);border-radius:4px;}
+.dice-history-entry{padding:7px 12px;border-bottom:1px solid var(--border);font-size:12px;font-family:'Share Tech Mono';display:flex;justify-content:space-between;}
+.dice-history-entry:last-child{border-bottom:none;}
+.result-animate{animation:resultPop .3s ease;}
+@keyframes resultPop{0%{transform:scale(.7);opacity:0;}70%{transform:scale(1.1);opacity:1;}100%{transform:scale(1);}}
+/* NATURES */
+.nature-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.nature-tag{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1px solid transparent;user-select:none;}
+.nature-katon{background:rgba(200,60,40,.2);border-color:#c03020;color:#ff7060;}
+.nature-fuuton{background:rgba(40,200,120,.2);border-color:#28c878;color:#60ffa0;}
+.nature-raiton{background:rgba(220,200,40,.2);border-color:#dcc828;color:#ffe840;}
+.nature-doton{background:rgba(160,120,60,.2);border-color:#a0783c;color:#c8a060;}
+.nature-suiton{background:rgba(40,100,220,.2);border-color:#2864dc;color:#60a0ff;}
+.nature-yin{background:rgba(120,40,200,.2);border-color:#7828c8;color:#c060ff;}
+.nature-yang{background:rgba(180,180,180,.2);border-color:#aaa;color:#ddd;}
+.nature-other{background:rgba(58,123,213,.15);border-color:var(--accent);color:var(--accent2);}
+.nature-tag.level2{box-shadow:0 0 8px currentColor;}
+.nature-tag.level3{box-shadow:0 0 14px currentColor;}
+.nature-tag .level-indicator{font-size:9px;opacity:.7;margin-left:4px;}
+/* SKILL */
+.skill-list{display:flex;flex-direction:column;gap:6px;}
+.skill-item{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;}
+.skill-item .skill-info{flex:1;}
+.skill-item .skill-name{font-weight:700;font-size:14px;color:var(--text-bright);}
+.skill-item .skill-meta{font-size:11px;color:var(--text-dim);margin-top:2px;}
+.skill-item .skill-desc{font-size:13px;color:var(--text);margin-top:6px;}
+.rank-badge{font-family:'Share Tech Mono';font-size:11px;padding:2px 6px;border-radius:3px;font-weight:700;flex-shrink:0;}
+.rank-D{background:rgba(100,120,160,.3);color:#8aaccc;border:1px solid #4060a0;}
+.rank-C{background:rgba(60,140,80,.3);color:#6acc8a;border:1px solid #3a8050;}
+.rank-B{background:rgba(60,100,200,.3);color:#6a9aee;border:1px solid #3a60cc;}
+.rank-A{background:rgba(160,100,20,.3);color:#e0b840;border:1px solid #a07010;}
+.rank-S{background:rgba(180,30,30,.3);color:#ff7070;border:1px solid #c02020;}
+/* INV */
+.inv-grid{display:flex;flex-direction:column;gap:6px;}
+.inv-item{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.inv-item .inv-qty{font-family:'Share Tech Mono';color:var(--accent2);font-size:16px;width:32px;text-align:center;flex-shrink:0;}
+/* PERI */
+.peri-table{width:100%;border-collapse:collapse;}
+.peri-table th{font-size:10px;letter-spacing:2px;color:var(--text-dim);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);}
+.peri-table td{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.08);}
+.peri-table tr:hover td{background:rgba(58,123,213,.07);}
+.peri-check{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;}
+.peri-bonus{font-family:'Share Tech Mono';color:var(--accent2);font-size:13px;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;justify-content:center;align-items:center;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;padding:20px;width:90%;max-width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 10px 40px var(--shadow);}
+.modal h3{font-family:'Cinzel',serif;color:var(--accent2);margin-bottom:16px;font-size:14px;letter-spacing:2px;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+/* TIMESKIP */
+.timeskip-result{background:var(--surface3);border:1px solid var(--border-bright);border-radius:6px;padding:14px;margin-top:12px;font-size:14px;line-height:1.7;color:var(--text-bright);white-space:pre-wrap;}
+.ts-option{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;cursor:pointer;transition:all .2s;text-align:center;}
+.ts-option:hover,.ts-option.selected{border-color:var(--accent);background:var(--accent-glow);color:var(--accent2);}
+.ts-option .ts-icon{font-size:22px;margin-bottom:3px;}
+.ts-option .ts-name{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px;}
+.history-log{max-height:200px;overflow-y:auto;background:var(--surface3);border:1px solid var(--border);border-radius:4px;}
+.history-entry{padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px;display:flex;gap:10px;align-items:flex-start;}
+.history-entry:last-child{border-bottom:none;}
+.history-entry .h-time{color:var(--text-dim);font-size:11px;flex-shrink:0;font-family:'Share Tech Mono';}
+.history-entry .h-xp{color:var(--gold);font-family:'Share Tech Mono';flex-shrink:0;}
+/* ASPECT */
+.aspect-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;position:relative;overflow:hidden;}
+.aspect-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+.aspect-card .asp-type{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;}
+.aspect-card .asp-name{font-family:'Cinzel',serif;font-size:14px;color:var(--text-bright);margin-bottom:6px;}
+.aspect-card.advanced{border-color:var(--gold);}
+.aspect-card.advanced .asp-name{color:var(--gold);}
+/* UTIL */
+.divider{height:1px;background:var(--border);margin:14px 0;}
+.text-muted{color:var(--text-dim);font-size:12px;}
+.text-accent{color:var(--accent2);}.text-gold{color:var(--gold);}.text-danger{color:var(--danger);}.text-success{color:var(--success);}
+.flex{display:flex;}.flex-between{display:flex;justify-content:space-between;align-items:center;}
+.gap8{gap:8px;}.mb8{margin-bottom:8px;}.mb12{margin-bottom:12px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;background:var(--accent-glow);border:1px solid var(--accent);color:var(--accent2);text-transform:uppercase;letter-spacing:1px;}
+::-webkit-scrollbar{width:6px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:3px;}
+/* ===== CHARACTER CARD (CPT Style) ===== */
+.char-card{
+  background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 50%,var(--surface) 100%);
+  border:1px solid var(--border-bright);
+  border-radius:12px;
+  padding:16px;
+  display:flex;
+  gap:16px;
+  position:relative;
+  overflow:hidden;
+}
+.char-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--chakra),var(--accent),var(--gold),var(--accent),var(--chakra));
+  background-size:300% 100%;
+  animation:cardShimmer 4s linear infinite;
+}
+@keyframes cardShimmer{0%{background-position:0%}100%{background-position:300%}}
+.char-card::after{
+  content:'忍';
+  position:absolute;right:-10px;bottom:-20px;
+  font-size:100px;font-family:'Cinzel',serif;
+  color:rgba(58,123,213,0.05);
+  pointer-events:none;
+}
+.char-card-left{
+  display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;
+}
+.char-photo-wrap{
+  width:90px;height:110px;
+  border-radius:8px;
+  border:2px solid var(--border-bright);
+  background:var(--surface3);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .2s;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+}
+.char-photo-wrap:hover{border-color:var(--accent);}
+.char-photo-placeholder{text-align:center;pointer-events:none;}
+.char-photo-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;opacity:0;transition:opacity .2s;
+}
+.char-photo-wrap:hover .char-photo-overlay{opacity:1;}
+.posto-badge{
+  background:linear-gradient(135deg,var(--accent),#1a4a9a);
+  color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;padding:3px 10px;border-radius:20px;
+  text-align:center;white-space:nowrap;
+}
+.char-card-center{flex:1;min-width:0;}
+.char-name-display{
+  font-family:'Cinzel',serif;font-size:20px;font-weight:700;
+  color:var(--text-bright);line-height:1.1;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.char-cla-display{font-size:12px;color:var(--accent2);letter-spacing:1px;margin-bottom:2px;}
+.char-vila-display{font-size:11px;color:var(--text-dim);margin-bottom:10px;}
+.char-stats-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.char-stat-pill{
+  background:var(--surface3);border:1px solid var(--border);
+  border-radius:4px;padding:4px 8px;min-width:60px;
+}
+.csp-label{display:block;font-size:8px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;}
+.csp-value{font-family:'Share Tech Mono';font-size:13px;color:var(--text-bright);}
+.char-classe-display{
+  font-size:11px;color:var(--gold);letter-spacing:1px;
+  background:rgba(200,168,64,.1);border:1px solid rgba(200,168,64,.3);
+  border-radius:3px;padding:2px 8px;display:inline-block;
+}
+.char-card-right{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;flex-shrink:0;
+}
+.char-level-badge{
+  background:linear-gradient(135deg,#1a0a30,#2a1050);
+  border:2px solid var(--chakra-bright);border-radius:8px;
+  padding:8px 14px;text-align:center;min-width:70px;
+}
+.char-fama-display{text-align:center;}
+@media(max-width:640px){
+  .char-card{flex-wrap:wrap;gap:12px;}
+  .char-card-left{flex-direction:row;width:100%;align-items:flex-start;}
+  .char-photo-wrap{width:70px;height:86px;}
+  .char-card-center{order:3;width:100%;}
+  .char-card-right{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:12px;}
+  .char-name-display{font-size:16px;}
+}
+/* ===== END CHARACTER CARD ===== */
+/* ===== COMBATE ===== */
+.combatente-row{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;display:flex;gap:8px;align-items:center;transition:all .2s;}
+.combatente-row.ativo{border-color:var(--gold);background:rgba(200,168,64,.08);}
+.combatente-row.aliado{border-left:3px solid var(--success);}
+.combatente-row.inimigo{border-left:3px solid var(--danger);}
+.combatente-row.proprio{border-left:3px solid var(--accent);}
+.comb-init-badge{font-family:'Share Tech Mono';font-size:16px;font-weight:700;width:36px;text-align:center;color:var(--gold);flex-shrink:0;}
+.comb-nome{flex:1;font-weight:600;font-size:14px;}
+.comb-hp-bar{display:flex;gap:4px;align-items:center;flex-shrink:0;}
+.comb-hp-bar input{width:52px;font-family:'Share Tech Mono';font-size:12px;text-align:center;}
+.comb-turn-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;opacity:0;transition:opacity .2s;}
+.combatente-row.ativo .comb-turn-dot{opacity:1;animation:turnPulse 1s ease infinite;}
+@keyframes turnPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:.5;}}
+.cond-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;}
+.cond-btn{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:5px 4px;font-size:10px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-align:center;color:var(--text-dim);}
+.cond-btn:hover{border-color:var(--accent);color:var(--accent2);}
+.cond-btn.ativo{background:rgba(224,90,90,.2);border-color:var(--danger);color:var(--danger);}
+.cond-tag{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;background:rgba(224,90,90,.2);border:1px solid var(--danger);color:var(--danger);display:inline-flex;align-items:center;gap:6px;cursor:pointer;}
+.attr-roll-pill{background:var(--surface2);border:2px solid var(--border);border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:all .2s;}
+.attr-roll-pill:hover{border-color:var(--accent);background:var(--accent-glow);}
+.attr-roll-pill.usado{opacity:.3;pointer-events:none;}
+.attr-roll-pill .val{font-family:'Share Tech Mono';font-size:22px;font-weight:700;color:var(--text-bright);}
+.attr-roll-pill .det{font-size:10px;color:var(--text-dim);}
+.attr-assign-row{display:flex;align-items:center;gap:8px;background:var(--surface3);border-radius:4px;padding:6px 10px;margin-bottom:4px;}
+.attr-assign-row label{flex:1;font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;}
+.attr-assign-row .av{font-family:'Share Tech Mono';font-size:18px;color:var(--accent2);width:36px;text-align:center;}
+.stat-box.at-limit input,.stat-box.at-limit .stat-value{color:var(--danger)!important;}
+.stat-box.near-limit input,.stat-box.near-limit .stat-value{color:var(--gold)!important;}
+.apres-header{background:var(--header-bg);padding:20px 24px;border-bottom:3px solid var(--accent);display:flex;gap:16px;align-items:center;}
+.apres-body{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;}
+.apres-section{border:1px solid var(--border);border-radius:6px;padding:12px;}
+.apres-section-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px;}
+.apres-stat-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(128,128,128,.08);font-size:13px;}
+.apres-stat-row:last-child{border-bottom:none;}
+.apres-stat-val{font-family:'Share Tech Mono';color:var(--text-bright);}
+@media(max-width:640px){.apres-body{grid-template-columns:1fr;}.cond-grid{grid-template-columns:repeat(2,1fr);}}
+/* ===== END COMBATE ===== */
+@media(max-width:768px){
+  /* Header */
+  #app-header{padding:8px 12px;gap:8px;flex-wrap:nowrap;}
+  #app-header h1{font-size:13px;letter-spacing:1.5px;}
+  #app-header .sub{font-size:9px;letter-spacing:1px;}
+  .header-actions{gap:4px;}
+  .theme-toggle{padding:4px 8px;font-size:11px;}
+  .btn-ghost.btn-sm{padding:4px 8px;font-size:11px;}
+
+  /* Tabs - scrollable pill row */
+  #tabs{padding:0 8px;gap:0;background:var(--surface2);}
+  .tab-btn{padding:8px 10px;font-size:10px;letter-spacing:0.8px;flex-shrink:0;}
+
+  /* Panel */
+  .panel{padding:10px;}
+
+  /* Grids collapse to single column */
+  .grid2,.grid3,.grid4{grid-template-columns:1fr;}
+
+  /* Stats grid 2 columns on mobile */
+  #attrs-main{grid-template-columns:repeat(3,1fr)!important;}
+  #attrs-sec{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* Timeskip options: 3 cols */
+  #panel-timeskip .grid3{grid-template-columns:repeat(3,1fr);}
+  .ts-option{padding:8px 4px;}
+  .ts-option .ts-icon{font-size:18px;margin-bottom:2px;}
+  .ts-option .ts-name{font-size:9px;letter-spacing:0.5px;}
+
+  /* Cards */
+  .card{padding:12px;}
+  .level-big{font-size:42px;}
+
+  /* Resource bar buttons */
+  .resource-bar .flex.gap8 button{padding:5px 8px;font-size:11px;flex:1;}
+
+  /* Modal */
+  .modal{width:95%;padding:16px;max-height:90vh;}
+
+  /* Dice */
+  .dice-grid{gap:6px;}
+  .die-btn{padding:8px 10px;font-size:13px;min-width:48px;}
+  .dice-result-main{font-size:32px;}
+
+  /* XP tags wrap better */
+  .tag-row{gap:4px;}
+  .tag{padding:3px 7px;font-size:10px;}
+
+  /* Inventory items */
+  .inv-item{flex-wrap:wrap;gap:6px;}
+  .inv-item>div:last-child{width:100%;justify-content:flex-end;}
+
+  /* Skill items */
+  .skill-item{flex-wrap:wrap;}
+  .skill-item .flex.gap8{width:100%;margin-top:6px;justify-content:flex-end;}
+
+  /* History entries */
+  .history-entry{flex-wrap:wrap;gap:4px;}
+
+  /* Poder rows */
+  .poder-row{gap:8px;}
+  .poder-row label{width:70px;font-size:10px;}
+
+  /* Peri table scroll */
+  #panel-pericias .card{overflow-x:auto;}
+  .peri-table{font-size:12px;min-width:320px;}
+  .peri-table th,.peri-table td{padding:5px 6px;}
+
+  /* Aspect grid */
+  #aspectos-list{grid-template-columns:1fr!important;}
+
+  /* Fix flex-between on mobile */
+  .flex-between{gap:8px;}
+
+  /* Bottom padding for last cards */
+  .panel > div:last-child{padding-bottom:16px;}
+
+  /* TS result textarea */
+  .timeskip-result{font-size:13px;padding:10px;}
+  
+  /* Custom duration row */
+  .ts-custom-dur{flex-wrap:nowrap;}
+}
+
+@media(max-width:400px){
+  #attrs-main{grid-template-columns:repeat(2,1fr)!important;}
+  .die-btn{padding:7px 8px;font-size:12px;min-width:42px;}
+  .tab-btn{padding:7px 8px;font-size:9px;}
+  #app-header h1{font-size:11px;}
+}
+
+/* Touch targets minimum size */
+@media(hover:none){
+  .btn{min-height:36px;}
+  .btn-sm{min-height:30px;}
+  .die-btn{min-height:44px;}
+  .ts-option{min-height:64px;}
+  input[type=checkbox].peri-check{width:22px;height:22px;}
+}
+</style>
+</head>
+<body>
+
+<div id="app-header">
+  <div>
+    <h1>Shinobi no Sekai</h1>
+    <div class="sub">Ficha de Personagem • BETA 2.0</div>
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀️ Claro</button>
+    <button class="btn btn-ghost btn-sm" onclick="openModal('modal-apresentacao');renderApresentacao()">🖼️</button>
+    <button class="btn btn-ghost btn-sm" onclick="exportData()">💾 Salvar</button>
+    <button class="btn btn-ghost btn-sm" onclick="importData()">📂 Carregar</button>
+    <input type="file" id="import-input" accept=".json" style="display:none" onchange="handleImport(event)">
+  </div>
+</div>
+
+<div id="tabs">
+  <button class="tab-btn active"  onclick="showTab('perfil',this)">👤 Perfil</button>
+  <button class="tab-btn"         onclick="showTab('stats',this)">⚡ Stats & XP</button>
+  <button class="tab-btn"         onclick="showTab('pericias',this)">📜 Perícias</button>
+  <button class="tab-btn"         onclick="showTab('dados',this)">🎲 Dados</button>
+  <button class="tab-btn"         onclick="showTab('combate',this)">⚔️ Combate</button>
+  <button class="tab-btn"         onclick="showTab('jutsu',this)">🔥 Jutsus</button>
+  <button class="tab-btn"         onclick="showTab('aspectos',this)">💎 Aspectos</button>
+  <button class="tab-btn"         onclick="showTab('inventario',this)">🎒 Inventário</button>
+  <button class="tab-btn"         onclick="showTab('timeskip',this)">⏳ Timeskip</button>
+</div>
+
+<!-- PERFIL -->
+<div id="panel-perfil" class="panel active">
+  <!-- CARD DE PERSONAGEM (estilo CPT/identidade visual) -->
+  <div class="char-card mb12">
+    <div class="char-card-left">
+      <div class="char-photo-wrap" onclick="triggerPhotoUpload()" title="Clique para adicionar foto">
+        <img id="char-photo-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px;">
+        <div id="char-photo-placeholder">
+          <div style="font-size:32px;margin-bottom:6px">🥷</div>
+          <div style="font-size:10px;letter-spacing:1px;color:var(--text-dim)">FOTO</div>
+        </div>
+        <div class="char-photo-overlay">📷</div>
+      </div>
+      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhoto(event)">
+      <div class="posto-badge" id="card-posto">Genin</div>
+    </div>
+    <div class="char-card-center">
+      <div class="char-name-display" id="card-nome">Nome do Ninja</div>
+      <div class="char-cla-display" id="card-cla">Clã —</div>
+      <div class="char-vila-display" id="card-vila">— Vila —</div>
+      <div class="char-stats-row">
+        <div class="char-stat-pill">
+          <span class="csp-label">Idade</span>
+          <span class="csp-value" id="card-idade">—</span>
+        </div>
+        <div class="char-stat-pill">
+          <span class="csp-label">Altura</span>
+          <span class="csp-value" id="card-altura">—</span>
+        </div>
+        <div class="char-stat-pill">
+          <span class="csp-label">Peso</span>
+          <span class="csp-value" id="card-peso">—</span>
+        </div>
+        <div class="char-stat-pill">
+          <span class="csp-label">Nasc.</span>
+          <span class="csp-value" id="card-nascimento">—</span>
+        </div>
+      </div>
+      <div class="char-classe-display" id="card-classe">— Classe —</div>
+    </div>
+    <div class="char-card-right">
+      <div class="char-level-badge">
+        <div style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.6);text-transform:uppercase">Nível</div>
+        <div style="font-size:36px;font-weight:700;font-family:'Share Tech Mono';color:#fff;line-height:1" id="card-level">1</div>
+      </div>
+      <div class="char-fama-display">
+        <div style="font-size:9px;color:var(--gold);letter-spacing:1px">⭐ FAMA</div>
+        <div style="font-family:'Share Tech Mono';font-size:18px;color:var(--gold)" id="card-fama">0</div>
+      </div>
+      <div style="font-size:9px;color:var(--text-dim);text-align:center;margin-top:4px" id="card-fama-tipo">Poder</div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO DETALHADO -->
+  <div class="grid2">
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Identidade</div>
+        <div class="grid2">
+          <div class="field"><label>Nome Completo</label><input type="text" id="p-nome" oninput="saveField('nome',this.value);updateCard()" placeholder="Nome do ninja"></div>
+          <div class="field"><label>Data de Nascimento</label><input type="text" id="p-nascimento" oninput="saveField('nascimento',this.value);updateCard()" placeholder="Ex: 10/03/1993"></div>
+          <div class="field"><label>Idade</label><input type="text" id="p-idade" oninput="saveField('idade',this.value);updateCard()" placeholder="Ex: 17"></div>
+          <div class="field"><label>Altura</label><input type="text" id="p-altura" oninput="saveField('altura',this.value);updateCard()" placeholder="Ex: 1,72m"></div>
+          <div class="field"><label>Peso</label><input type="text" id="p-peso" oninput="saveField('peso',this.value);updateCard()" placeholder="Ex: 65kg"></div>
+          <div class="field"><label>Sangue / Tipo</label><input type="text" id="p-sangue" oninput="saveField('sangue',this.value)" placeholder="Ex: Tipo B"></div>
+          <div class="field"><label>Clã</label><input type="text" id="p-cla" oninput="saveField('cla',this.value);updateCard()" placeholder="Ex: Uchiha"></div>
+          <div class="field"><label>Vila / Origem</label><input type="text" id="p-vila" oninput="saveField('vila',this.value);updateCard()" placeholder="Ex: Konoha"></div>
+          <div class="field"><label>Posto Ninja</label>
+            <select id="p-posto" onchange="saveField('posto',this.value);updateCard()">
+              <option>Genin</option><option>Chunin</option><option>Jonin</option><option>ANBU</option>
+              <option>Tokubetsu Jonin</option><option>Kage</option><option>Ronin</option><option>Desconhecido</option>
+            </select>
+          </div>
+          <div class="field"><label>Classe Principal</label>
+            <select id="p-classe" onchange="saveField('classe',this.value);updateCard()">
+              <option value="">— Selecionar —</option>
+              <option>Duelista</option><option>Desafiante</option><option>Distanciador</option><option>A Escolha Perfeita</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Aparência</label><textarea id="p-aparencia" rows="3" oninput="saveField('aparencia',this.value)" placeholder="Descrição física detalhada..."></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Fama & Conexões</div>
+        <div class="grid2 mb8">
+          <div class="stat-box"><div class="stat-label">Pontos de Fama</div><input type="number" id="p-fama" value="0" min="0" oninput="saveField('fama',this.value);updateCard()"></div>
+          <div class="stat-box"><div class="stat-label">Ryo (Dinheiro)</div><input type="number" id="p-ryo" value="0" min="0" oninput="saveField('ryo',this.value)"></div>
+        </div>
+        <div class="field"><label>Tipo de Fama</label>
+          <select id="p-fama-tipo" onchange="saveField('famaTipo',this.value);updateCard()">
+            <option>Poder</option><option>Linhagem</option><option>Ação</option><option>Misto</option>
+          </select>
+        </div>
+        <div class="field"><label>Conexões / Aliados</label><textarea id="p-conexoes" rows="3" oninput="saveField('conexoes',this.value)"></textarea></div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Psicologia & Personalidade</div>
+        <div class="field"><label>Traços de Personalidade</label><textarea id="p-tracos" rows="3" oninput="saveField('tracos',this.value)"></textarea></div>
+        <div class="field"><label>Motivação / Sonho</label><textarea id="p-motivacao" rows="2" oninput="saveField('motivacao',this.value)"></textarea></div>
+        <div class="field"><label>Medos</label><textarea id="p-medos" rows="2" oninput="saveField('medos',this.value)"></textarea></div>
+        <div class="field"><label>Traumas</label><textarea id="p-traumas" rows="2" oninput="saveField('traumas',this.value)"></textarea></div>
+        <div class="field"><label>Segredos</label><textarea id="p-segredos" rows="2" oninput="saveField('segredos',this.value)"></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-title">História</div>
+        <div class="field"><label>Backstory</label><textarea id="p-historia" rows="10" oninput="saveField('historia',this.value)" placeholder="A história completa do personagem..."></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS & XP -->
+<div id="panel-stats" class="panel">
+  <div class="grid2">
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Recursos Vitais</div>
+        <div class="resource-bar mb8">
+          <div class="resource-header">
+            <span class="resource-name hp">❤ Vida</span>
+            <div class="resource-values">
+              <input type="number" id="hp-atual" value="30" min="0" oninput="updateBar('hp')">
+              <span>/</span>
+              <input type="number" id="hp-max" value="30" min="1" oninput="updateBar('hp')">
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill hp" id="bar-hp" style="width:100%"></div></div>
+          <div class="flex gap8" style="margin-top:6px">
+            <button class="btn btn-sm btn-danger" onclick="adjRes('hp',-5)">−5</button>
+            <button class="btn btn-sm btn-danger" onclick="adjRes('hp',-1)">−1</button>
+            <button class="btn btn-sm btn-success" onclick="adjRes('hp',1)">+1</button>
+            <button class="btn btn-sm btn-success" onclick="adjRes('hp',5)">+5</button>
+            <button class="btn btn-sm" onclick="adjRes('hp',9999)">Full</button>
+          </div>
+        </div>
+        <div class="resource-bar">
+          <div class="resource-header">
+            <span class="resource-name chakra">◈ Chakra</span>
+            <div class="resource-values">
+              <input type="number" id="ch-atual" value="50" min="0" oninput="updateBar('ch')">
+              <span>/</span>
+              <input type="number" id="ch-max" value="50" min="1" oninput="updateBar('ch')">
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill chakra" id="bar-ch" style="width:100%"></div></div>
+          <div class="flex gap8" style="margin-top:6px">
+            <button class="btn btn-sm btn-danger" onclick="adjRes('ch',-10)">−10</button>
+            <button class="btn btn-sm btn-danger" onclick="adjRes('ch',-1)">−1</button>
+            <button class="btn btn-sm btn-success" onclick="adjRes('ch',1)">+1</button>
+            <button class="btn btn-sm btn-success" onclick="adjRes('ch',10)">+10</button>
+            <button class="btn btn-sm" onclick="adjRes('ch',9999)">Full</button>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="field"><label>Fadiga Acumulada</label><input type="number" id="fadiga" value="0" min="0" oninput="saveField('fadiga',this.value)"></div>
+          <div class="field"><label>Vida Temporária</label><input type="number" id="vidatemp" value="0" min="0" oninput="saveField('vidatemp',this.value)"></div>
+        </div>
+      </div>
+      <div class="card mb12">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Atributos Principais</span>
+          <span id="attr-limit-display" style="font-size:10px;color:var(--text-dim)">Limite: 15 (Nv 1)</span>
+        </div>
+        <div class="grid3" id="attrs-main"></div>
+      </div>
+      <div class="card mb12">
+        <div class="card-title">Poder (Combate)</div>
+        <div id="attrs-poder"></div>
+        <div class="divider"></div>
+        <div class="flex-between mb8">
+          <label style="width:auto;margin:0">Controle de Chakra (Esp+Int)</label>
+          <span class="text-accent" id="cc-total" style="font-family:'Share Tech Mono';font-size:18px">0</span>
+        </div>
+        <div class="flex-between">
+          <label style="width:auto;margin:0">Proficiência</label>
+          <span class="text-accent" id="prof-display" style="font-family:'Share Tech Mono';font-size:18px">+1</span>
+        </div>
+      </div>
+      <div class="card mb12">
+        <div class="card-title">Atributos Secundários</div>
+        <div class="grid4" id="attrs-sec"></div>
+      </div>
+      <div class="card mb12">
+        <div class="card-title">Naturezas de Chakra</div>
+        <div id="natures-container" class="nature-grid mb8"></div>
+        <div class="flex gap8 mb8">
+          <select id="nat-sel" style="flex:1">
+            <option value="">— Natureza —</option>
+            <optgroup label="Básicas"><option>Katon</option><option>Fuuton</option><option>Raiton</option><option>Doton</option><option>Suiton</option></optgroup>
+            <optgroup label="Essenciais"><option>Yin</option><option>Yang</option></optgroup>
+            <optgroup label="Ramificações"><option>Haienton</option><option>Bakuenton</option><option>Hyouton</option><option>Deiton</option><option>Mokuton</option><option>Youton</option><option>Kouton</option><option>Shakuton</option><option>Bakuton</option><option>Futton</option><option>Jiton</option></optgroup>
+            <option value="custom">+ Personalizada...</option>
+          </select>
+          <select id="nat-level" style="width:58px"><option>1</option><option>2</option><option>3</option></select>
+          <button class="btn btn-sm" onclick="addNature()">Add</button>
+        </div>
+        <div class="field"><label>Afinidade / Inata</label><input type="text" id="nat-inata" oninput="saveField('natInata',this.value)" placeholder="Ex: Katon (Inato)"></div>
+      </div>
+      <div class="card mb12">
+        <div class="card-title">Estilos Habilitados</div>
+        <div id="estilos-list"></div>
+        <div class="flex gap8" style="margin-top:8px">
+          <select id="estilo-sel" style="flex:1">
+            <option value="">— Adicionar Estilo —</option>
+            <option>Técnica Marcial</option><option>Técnica de Shuriken</option><option>Técnica de Espada</option>
+            <option>Técnica de Agulha</option><option>Proficiente em Armas</option><option>Técnica Proibida</option>
+            <option>Ninjutsu Espaço-Tempo</option><option>Ninjutsu Médico</option><option>Infundir Chakra</option>
+            <option>Técnica de Selamento</option><option>Técnica de Marionete</option><option>Técnica de Clones</option>
+            <option>Senjutsu</option><option>Técnica de Combinação</option><option>Técnica de Absorção</option><option>Técnica de Barreira</option>
+          </select>
+          <select id="estilo-lvl" style="width:56px"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+          <button class="btn btn-sm" onclick="addEstilo()">Add</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Descanso</div>
+        <div class="grid3 mb8">
+          <button class="btn btn-sm btn-ghost" onclick="descanso('curto')">Curto</button>
+          <button class="btn btn-sm btn-ghost" onclick="descanso('longo')">Longo</button>
+          <button class="btn btn-sm btn-success" onclick="descanso('completo')">Completo</button>
+        </div>
+        <div id="descanso-result" class="text-muted" style="font-size:12px"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Nível & Progressão</div>
+        <div class="xp-display">
+          <div class="level-big" id="level-display">1</div>
+          <div class="xp-info" id="xp-info-text">0/1 sessões → Nível 2</div>
+          <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div>
+          <div class="xp-total">XP Total: <span id="xp-total-display">0</span></div>
+        </div>
+        <div class="divider"></div>
+        <!-- Sessões no nível -->
+        <div class="flex-between mb8">
+          <label style="width:auto;margin:0">Sessões neste nível</label>
+          <div class="flex gap8" style="align-items:center">
+            <button class="btn btn-sm btn-ghost" onclick="adjSessoes(-1)">−</button>
+            <span style="font-family:'Share Tech Mono';font-size:18px;color:var(--accent2);min-width:40px;text-align:center" id="sessoes-atual-display">0</span>
+            <span class="text-muted">/ <span id="sessoes-needed">1</span></span>
+            <button class="btn btn-sm btn-ghost" onclick="adjSessoes(1)">+</button>
+          </div>
+        </div>
+        <!-- Encerrar sessão com bônus -->
+        <div class="card" style="background:var(--surface3);border-color:var(--border);padding:10px;margin-bottom:8px">
+          <div class="text-muted mb8" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">Encerrar Sessão</div>
+          <div class="flex gap8 mb8" style="align-items:center;flex-wrap:wrap">
+            <div style="flex:1;min-width:120px">
+              <label style="font-size:10px;margin-bottom:2px">Teste de Sabedoria (Bônus)</label>
+              <input type="number" id="sess-sab-roll" placeholder="Rolagem d20" min="1" max="20" style="width:100%">
+            </div>
+            <div style="flex:1;min-width:80px">
+              <label style="font-size:10px;margin-bottom:2px">CD do Mestre</label>
+              <input type="number" id="sess-sab-cd" placeholder="CD (10-40)" value="15" min="10" max="40" style="width:100%">
+            </div>
+          </div>
+          <button class="btn btn-success" onclick="encerrarSessao()" style="width:100%">🎯 Encerrar Sessão (+<span id="xp-por-sessao">4</span> XP)</button>
+          <div id="sess-bonus-msg" style="font-size:12px;margin-top:6px;text-align:center;color:var(--gold)"></div>
+        </div>
+        <!-- Subir de nível manualmente se sessões completas -->
+        <button class="btn btn-gold" id="btn-levelup" onclick="levelUp()" style="width:100%;display:none">⬆️ Subir de Nível!</button>
+      </div>
+      <div class="card mb12">
+        <div class="card-title">Adicionar / Gastar XP</div>
+        <div class="field"><label>Quantidade</label><input type="number" id="xp-add-qty" value="" min="0" placeholder="Ex: 200"></div>
+        <div class="field"><label>Descrição</label><input type="text" id="xp-add-desc" placeholder="Ex: Jutsu Rank B adquirido..."></div>
+        <div class="mb8">
+          <div class="text-muted mb8" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">Referência de custos (clique para preencher)</div>
+          <div class="tag-row">
+            <span class="tag" style="cursor:pointer" onclick="setXP(5)">Jutsu D:5</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(10)">Jutsu C:10</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(15)">Jutsu B:15</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(25)">Jutsu A:25</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(70)">Jutsu S:70</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(20)">Estilo:20</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(50)">Árvore:50</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(150)">Asp.S:150</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(500)">Asp.A:500</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(30)">Yin/Yang:30</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(20)">Hab.Dist:20</span>
+            <span class="tag" style="cursor:pointer" onclick="setXP(500)">Pt.Attr:500</span>
+          </div>
+        </div>
+        <div class="flex gap8">
+          <button class="btn btn-danger" style="flex:1" onclick="addXP()">➖ Gastar XP</button>
+          <button class="btn btn-success" style="flex:1" onclick="gainXP()">⭐ Ganhar XP</button>
+        </div>
+        <div id="xp-msg" style="margin-top:8px;font-size:13px"></div>
+      </div>
+      <div class="card mb12">
+        <div class="card-title">Histórico de XP</div>
+        <div class="xp-log" id="xp-log-list"><div class="xp-entry"><span class="xp-desc text-muted">Nenhum registro.</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tabela de Níveis</div>
+        <div style="max-height:320px;overflow-y:auto">
+          <table class="peri-table"><thead><tr><th>Nível</th><th>XP/Sessão</th><th>Sessões p/ Subir</th></tr></thead><tbody id="level-ref-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PERÍCIAS -->
+<div id="panel-pericias" class="panel">
+  <div class="card">
+    <div class="card-title">Perícias</div>
+    <table class="peri-table"><thead><tr><th>Perícia</th><th>Atrib.</th><th>Prof.</th><th>Esp.</th><th>Bônus</th></tr></thead><tbody id="peri-body"></tbody></table>
+  </div>
+</div>
+
+<!-- DADOS -->
+<div id="panel-dados" class="panel">
+  <div class="grid2">
+    <div>
+      <div class="dice-panel mb12">
+        <div class="card-title" style="color:var(--gold)">🎲 Rolar Dados</div>
+        <div class="dice-modifiers mb8">
+          <label>Quantidade:</label>
+          <input type="number" id="dice-qty" class="dice-qty-input" value="1" min="1" max="20" style="width:60px">
+        </div>
+        <div class="dice-grid">
+          <button class="die-btn" onclick="rollDie(4)">d4</button>
+          <button class="die-btn" onclick="rollDie(6)">d6</button>
+          <button class="die-btn" onclick="rollDie(8)">d8</button>
+          <button class="die-btn" onclick="rollDie(10)">d10</button>
+          <button class="die-btn" onclick="rollDie(12)">d12</button>
+          <button class="die-btn" onclick="rollDie(20)">d20</button>
+          <button class="die-btn" onclick="rollDie(100)">d100</button>
+          <button class="die-btn" onclick="rollCustom()" style="color:var(--gold)">d?</button>
+        </div>
+        <div class="dice-modifiers">
+          <label>Modificador:</label>
+          <input type="number" id="dice-mod" class="mod-input" value="0" style="width:65px">
+          <label style="margin-left:8px">Tipo:</label>
+          <select id="dice-adv" style="flex:1;min-width:130px">
+            <option value="normal">Normal</option>
+            <option value="vantagem">Vantagem (Buff 🔼)</option>
+            <option value="desvantagem">Desvantagem (Nerf 🔽)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Rótulo (opcional)</label>
+          <input type="text" id="dice-label" placeholder="Ex: Teste de Vitalidade, Dano Katon...">
+        </div>
+        <div class="dice-result-area">
+          <div id="dice-result-main" class="dice-result-main">—</div>
+          <div id="dice-result-detail" class="dice-result-detail"></div>
+          <div id="dice-result-mod" class="dice-result-mod"></div>
+        </div>
+      </div>
+      <div class="dice-panel">
+        <div class="card-title" style="color:var(--accent2)">🔧 Fórmula Personalizada</div>
+        <div class="text-muted mb8" style="font-size:11px">Formato: NdX ou NdX+mod  (ex: 3d6+4, 2d20+Ninjutsu)</div>
+        <div class="flex gap8 mb8">
+          <input type="text" id="formula-input" placeholder="Ex: 3d6+4" style="flex:1">
+          <input type="number" id="formula-bonus" placeholder="Bônus extra" style="width:80px">
+        </div>
+        <div class="flex gap8 mb8">
+          <select id="formula-adv" style="flex:1">
+            <option value="normal">Normal</option>
+            <option value="vantagem">Vantagem (Buff)</option>
+            <option value="desvantagem">Desvantagem (Nerf)</option>
+          </select>
+          <button class="btn btn-gold" onclick="rollFormula()">🎲 Rolar</button>
+        </div>
+        <div id="formula-result" class="dice-result-area">
+          <div style="text-align:center;color:var(--text-dim);font-size:13px">Aguardando rolagem...</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title">📋 Histórico de Rolls</div>
+        <div class="dice-history-list" id="dice-history">
+          <div style="padding:20px;text-align:center;color:var(--text-dim);font-size:13px">Nenhuma rolagem ainda.</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%" onclick="clearDiceHistory()">Limpar Histórico</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📖 Referência de Testes</div>
+        <div style="font-size:13px;line-height:1.9;color:var(--text)">
+          <div class="mb8"><strong style="color:var(--accent2)">Dificuldades (CD):</strong></div>
+          <div>CD 5 — Muito Fácil</div><div>CD 10 — Fácil</div><div>CD 12 — Moderado</div>
+          <div>CD 14 — Difícil</div><div>CD 17 — Muito Difícil</div><div>CD 20 — Heroico</div><div>CD 25+ — Lendário</div>
+          <div class="divider"></div>
+          <div class="mb8"><strong style="color:var(--accent2)">Vantagem / Desvantagem:</strong></div>
+          <div>🔼 <strong>Buff / Vantagem:</strong> rola 2×, usa o maior</div>
+          <div>🔽 <strong>Nerf / Desvantagem:</strong> rola 2×, usa o menor</div>
+          <div class="divider"></div>
+          <div class="mb8"><strong style="color:var(--gold)">Eventos Especiais d20:</strong></div>
+          <div>⭐ <strong>Nat 20</strong> — Acerto crítico</div>
+          <div>☠ <strong>Nat 1</strong> — Falha crítica</div>
+          <div class="divider"></div>
+          <div class="mb8"><strong style="color:var(--accent2)">Dados de Fadiga:</strong></div>
+          <div>• Berserk: 2d100 • Eco: 1d8</div>
+          <div>• Além do limite: 1d20</div>
+          <div>• Transf. Cobra Nv.A: 3d6</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JUTSUS -->
+<div id="panel-jutsu" class="panel">
+  <div class="flex-between mb12">
+    <div class="text-muted">Total: <span class="text-accent" id="jutsu-count">0</span></div>
+    <button class="btn" onclick="openModal('modal-jutsu')">+ Adicionar Jutsu</button>
+  </div>
+  <div class="tag-row mb12">
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('')">Todos</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('D')">D</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('C')">C</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('B')">B</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('A')">A</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('S')">S</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('Ninjutsu')">Ninjutsu</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('Genjutsu')">Genjutsu</button>
+    <button class="btn btn-ghost btn-sm" onclick="filterJutsu('Taijutsu')">Taijutsu</button>
+  </div>
+  <div class="skill-list" id="jutsu-list"><div class="text-muted" style="text-align:center;padding:40px">Nenhum jutsu cadastrado.</div></div>
+</div>
+
+<!-- ASPECTOS -->
+<div id="panel-aspectos" class="panel">
+  <div class="flex-between mb12">
+    <div><span class="text-muted">Simples: <span class="text-accent" id="asp-simples-count">0</span> &nbsp;|&nbsp; Avançados: <span class="text-gold" id="asp-avancados-count">0</span></span></div>
+    <button class="btn" onclick="openModal('modal-aspecto')">+ Adicionar Aspecto</button>
+  </div>
+  <div class="grid2" id="aspectos-list"><div class="text-muted" style="grid-column:1/-1;text-align:center;padding:40px">Nenhum aspecto.</div></div>
+</div>
+
+<!-- INVENTÁRIO -->
+<div id="panel-inventario" class="panel">
+  <div class="grid2">
+    <div>
+      <div class="card mb12">
+        <div class="card-title flex-between"><span>Itens</span><button class="btn btn-sm" onclick="openModal('modal-item')">+ Adicionar</button></div>
+        <div class="inv-grid" id="inv-list"><div class="text-muted" style="text-align:center;padding:30px">Inventário vazio.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Equipamentos</div>
+        <div class="field"><label>Arma Principal</label><input type="text" id="equip-arma1" oninput="saveField('equipArma1',this.value)"></div>
+        <div class="field"><label>Arma Secundária</label><input type="text" id="equip-arma2" oninput="saveField('equipArma2',this.value)"></div>
+        <div class="field"><label>Armadura / Proteção</label><input type="text" id="equip-armadura" oninput="saveField('equipArmadura',this.value)"></div>
+        <div class="field"><label>Acessório 1</label><input type="text" id="equip-ac1" oninput="saveField('equipAc1',this.value)"></div>
+        <div class="field"><label>Acessório 2</label><input type="text" id="equip-ac2" oninput="saveField('equipAc2',this.value)"></div>
+        <div class="field"><label>Notas</label><textarea id="equip-notas" rows="2" oninput="saveField('equipNotas',this.value)"></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Consumíveis Rápidos</div>
+        <div class="grid2">
+          <div class="field"><label>Shurikens</label><input type="number" id="inv-shuriken" value="0" min="0" oninput="saveField('invShuriken',this.value)"></div>
+          <div class="field"><label>Kunais</label><input type="number" id="inv-kunai" value="0" min="0" oninput="saveField('invKunai',this.value)"></div>
+          <div class="field"><label>Senbons</label><input type="number" id="inv-senbon" value="0" min="0" oninput="saveField('invSenbon',this.value)"></div>
+          <div class="field"><label>Pergaminhos</label><input type="number" id="inv-scroll" value="0" min="0" oninput="saveField('invScroll',this.value)"></div>
+          <div class="field"><label>Pílulas Chakra</label><input type="number" id="inv-pilula" value="0" min="0" oninput="saveField('invPilula',this.value)"></div>
+        </div>
+        <div class="field"><label>Outros</label><textarea id="inv-outros" rows="3" oninput="saveField('invOutros',this.value)"></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMESKIP -->
+<div id="panel-timeskip" class="panel">
+  <div class="grid2">
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Configurar Timeskip</div>
+        <div class="grid3 mb8">
+          <div class="ts-option selected" data-type="treino" onclick="selectTS(this)"><div class="ts-icon">⚔️</div><div class="ts-name">Treino</div></div>
+          <div class="ts-option" data-type="estudo" onclick="selectTS(this)"><div class="ts-icon">📚</div><div class="ts-name">Estudo</div></div>
+          <div class="ts-option" data-type="descanso" onclick="selectTS(this)"><div class="ts-icon">🏕️</div><div class="ts-name">Descanso</div></div>
+          <div class="ts-option" data-type="missao" onclick="selectTS(this)"><div class="ts-icon">🗡️</div><div class="ts-name">Missão</div></div>
+          <div class="ts-option" data-type="viagem" onclick="selectTS(this)"><div class="ts-icon">🗺️</div><div class="ts-name">Viagem</div></div>
+          <div class="ts-option" data-type="social" onclick="selectTS(this)"><div class="ts-icon">🤝</div><div class="ts-name">Social</div></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label>Duração</label>
+            <div class="flex gap8 ts-custom-dur">
+              <input type="number" id="ts-dur-valor" value="1" min="1" max="9999" style="width:80px;flex-shrink:0">
+              <select id="ts-dur-unidade" style="flex:1">
+                <option value="dias">Dias</option>
+                <option value="semanas">Semanas</option>
+                <option value="meses">Meses</option>
+                <option value="anos">Anos</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Intensidade</label>
+            <select id="ts-intensidade">
+              <option value="leve">Leve / Descanso</option><option value="moderado" selected>Moderado</option>
+              <option value="intenso">Intenso</option><option value="extremo">Extremo / Perigoso</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Foco / Objetivo</label><textarea id="ts-foco" rows="3" placeholder="Ex: Treino de Taijutsu com sensei..."></textarea></div>
+        <div class="field"><label>Detalhes adicionais</label><textarea id="ts-detalhes" rows="2" placeholder="Condições, acompanhantes..."></textarea></div>
+        <button class="btn" onclick="calcTimeskip()" style="width:100%">⏳ Calcular Timeskip</button>
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Resultado</div>
+        <div id="ts-result" class="timeskip-result" style="min-height:200px;color:var(--text-dim)">Configure e calcule um timeskip para ver os resultados aqui.</div>
+        <div class="flex gap8" style="margin-top:8px">
+          <button class="btn btn-sm btn-success" id="ts-apply-btn" onclick="applyTimeskip()" style="display:none">✅ Aplicar</button>
+          <button class="btn btn-sm btn-ghost" id="ts-discard-btn" onclick="discardTimeskip()" style="display:none">❌ Descartar</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Histórico</div>
+        <div class="history-log" id="ts-history"><div class="text-muted" style="padding:20px;text-align:center">Nenhum timeskip.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMBATE -->
+<div id="panel-combate" class="panel">
+  <div class="grid2">
+    <!-- COLUNA ESQUERDA: Iniciativa + Condições -->
+    <div>
+      <!-- TRACKER DE COMBATE -->
+      <div class="card mb12">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          <span>⚔️ Tracker de Combate</span>
+          <div class="flex gap8">
+            <span style="font-size:11px;color:var(--text-dim)">Rodada: <strong style="color:var(--accent2);font-family:'Share Tech Mono'" id="rodada-num">1</strong></span>
+            <button class="btn btn-sm btn-ghost" onclick="adjRodada(-1)">−</button>
+            <button class="btn btn-sm btn-ghost" onclick="adjRodada(1)">+</button>
+            <button class="btn btn-sm btn-danger" onclick="resetCombate()">Reset</button>
+          </div>
+        </div>
+        <!-- Adicionar combatente -->
+        <div class="flex gap8 mb8" style="flex-wrap:wrap">
+          <input type="text" id="comb-nome" placeholder="Nome do combatente" style="flex:1;min-width:120px">
+          <input type="number" id="comb-init" placeholder="Iniciativa" style="width:80px">
+          <select id="comb-tipo" style="width:90px">
+            <option value="aliado">Aliado</option>
+            <option value="inimigo">Inimigo</option>
+            <option value="proprio">Próprio</option>
+          </select>
+          <button class="btn btn-sm" onclick="addCombatente()">+ Add</button>
+        </div>
+        <div id="combate-lista" style="display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto">
+          <div class="text-muted" style="text-align:center;padding:20px">Nenhum combatente. Adicione acima!</div>
+        </div>
+      </div>
+      <!-- CALCULADORA DE DANO POR JUTSU -->
+      <div class="card mb12">
+        <div class="card-title">🎯 Calcular Dano de Jutsu</div>
+        <div class="field">
+          <label>Selecionar Jutsu</label>
+          <select id="dmg-jutsu-sel" style="width:100%" onchange="preencherJutsoDmg()">
+            <option value="">— Escolha um jutsu —</option>
+          </select>
+        </div>
+        <div class="grid2 mb8">
+          <div class="field"><label>Custo de Chakra</label><input type="text" id="dmg-chakra" readonly style="background:var(--surface2)"></div>
+          <div class="field"><label>Fórmula de Dano</label><input type="text" id="dmg-formula" placeholder="Ex: 3d6+Ninjutsu"></div>
+        </div>
+        <div class="field"><label>Modificador extra (atributo)</label>
+          <select id="dmg-attr-sel" style="width:100%">
+            <option value="0">Nenhum</option>
+            <option value="ninjutsu">+ Ninjutsu</option>
+            <option value="taijutsu">+ Taijutsu</option>
+            <option value="genjutsu">+ Genjutsu</option>
+            <option value="vitalidade">+ Vitalidade</option>
+            <option value="destreza">+ Destreza</option>
+          </select>
+        </div>
+        <button class="btn btn-gold" style="width:100%;margin-bottom:8px" onclick="calcularDanoJutsu()">🎲 Rolar Dano</button>
+        <div id="dmg-result" class="dice-result-area" style="min-height:60px;display:flex;align-items:center;justify-content:center">
+          <span style="color:var(--text-dim);font-size:13px">Selecione um jutsu e role o dano</span>
+        </div>
+      </div>
+    </div>
+    <!-- COLUNA DIREITA: Condições + Level Up -->
+    <div>
+      <!-- CONDIÇÕES DE STATUS -->
+      <div class="card mb12">
+        <div class="card-title">🔴 Condições Ativas</div>
+        <div id="condicoes-ativas" class="flex" style="flex-wrap:wrap;gap:6px;min-height:36px;margin-bottom:10px">
+          <span class="text-muted" style="font-size:12px">Nenhuma condição ativa.</span>
+        </div>
+        <div class="divider"></div>
+        <div style="font-size:10px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px">Aplicar condição</div>
+        <div id="cond-grid" class="cond-grid"></div>
+      </div>
+
+      <!-- ROLADOR DE ATRIBUTOS INICIAIS -->
+      <div class="card mb12">
+        <div class="card-title">🎲 Rolador de Atributos (Criação)</div>
+        <div class="text-muted mb8" style="font-size:12px">3d4, descarta o menor, repete 6×. Distribua os valores.</div>
+        <button class="btn" style="width:100%;margin-bottom:10px" onclick="rolarAtributos()">🎲 Rolar Atributos</button>
+        <div id="attr-roll-result" style="display:none">
+          <div class="grid3 mb8" id="attr-roll-vals"></div>
+          <div class="text-muted mb8" style="font-size:11px">Clique em um valor para atribuí-lo ao campo selecionado</div>
+          <div class="grid2 mb8" id="attr-assign-grid"></div>
+          <div class="flex gap8">
+            <button class="btn btn-success btn-sm" style="flex:1" onclick="aplicarAtributos()">✅ Aplicar</button>
+            <button class="btn btn-ghost btn-sm" style="flex:1" onclick="document.getElementById('attr-roll-result').style.display='none'">Cancelar</button>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="text-muted mb8" style="font-size:12px">Ou use os valores padrão do sistema:</div>
+        <div class="tag-row mb8">
+          <span class="tag">8</span><span class="tag">6</span><span class="tag">6</span><span class="tag">4</span><span class="tag">4</span><span class="tag">3</span>
+        </div>
+      </div>
+
+      <!-- CALCULADORA DE LEVEL UP -->
+      <div class="card">
+        <div class="card-title">⬆️ Subir de Nível — Rolagens</div>
+        <div class="text-muted mb8" style="font-size:12px">Ao subir de nível: Vida = 1d10 + Vitalidade · Chakra = 1d20 + Espírito</div>
+        <button class="btn btn-gold" style="width:100%;margin-bottom:10px" onclick="rolarLevelUp()">🎲 Rolar Ganhos de Nível</button>
+        <div id="levelup-result" style="display:none">
+          <div class="grid2 mb8">
+            <div class="stat-box">
+              <div class="stat-label">❤ Vida Ganha</div>
+              <div class="stat-value" id="lu-vida" style="color:var(--hp-bright)">+0</div>
+              <div style="font-size:10px;color:var(--text-dim);margin-top:4px" id="lu-vida-det"></div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">◈ Chakra Ganho</div>
+              <div class="stat-value" id="lu-chakra" style="color:var(--chakra-bright)">+0</div>
+              <div style="font-size:10px;color:var(--text-dim);margin-top:4px" id="lu-chakra-det"></div>
+            </div>
+          </div>
+          <button class="btn btn-success" style="width:100%" onclick="aplicarLevelUp()">✅ Aplicar ao Personagem</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODO APRESENTAÇÃO (overlay) -->
+<div id="modal-apresentacao" class="modal-overlay">
+  <div class="modal" style="max-width:700px;width:95%;padding:0;overflow:hidden;background:var(--surface)">
+    <div id="apresentacao-content" style="padding:24px"></div>
+    <div style="padding:12px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-apresentacao')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-jutsu">
+  <div class="modal">
+    <h3>⚡ Adicionar Jutsu</h3>
+    <div class="field"><label>Nome</label><input type="text" id="j-nome" placeholder="Ex: Katon: Grande Bola de Fogo"></div>
+    <div class="grid2">
+      <div class="field"><label>Rank</label><select id="j-rank"><option>D</option><option>C</option><option>B</option><option>A</option><option>S</option></select></div>
+      <div class="field"><label>Tipo</label><select id="j-tipo"><option>Ninjutsu</option><option>Genjutsu</option><option>Taijutsu</option><option>Ninjutsu Médico</option><option>Kinjutsu</option><option>Hiden</option><option>Outro</option></select></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Custo de Chakra</label><input type="number" id="j-chakra" placeholder="Ex: 50"></div>
+      <div class="field"><label>Nível Atual</label><input type="number" id="j-nivel" value="1" min="1"></div>
+    </div>
+    <div class="field"><label>Natureza / Estilo</label><input type="text" id="j-natureza" placeholder="Ex: Katon, Yang..."></div>
+    <div class="field"><label>Requisitos</label><input type="text" id="j-req" placeholder="Ex: CC 12; Natureza Katon"></div>
+    <div class="field"><label>Descrição / Efeito</label><textarea id="j-desc" rows="4"></textarea></div>
+    <div class="field"><label>Notas Pessoais</label><textarea id="j-notas" rows="2"></textarea></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal('modal-jutsu')">Cancelar</button><button class="btn" onclick="saveJutsu()">Salvar</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-aspecto">
+  <div class="modal">
+    <h3>💎 Adicionar Aspecto</h3>
+    <div class="field"><label>Nome</label><input type="text" id="asp-nome"></div>
+    <div class="grid2">
+      <div class="field"><label>Tipo</label><select id="asp-tipo"><option value="simples">Simples</option><option value="avancado">Avançado</option></select></div>
+      <div class="field"><label>Categoria</label><select id="asp-cat"><option>Aspecto Geral</option><option>Clã Especial</option><option>Kekkei Genkai Elemental</option><option>Kekkei Genkai Singular</option><option>Habilidade Adquirida</option><option>Técnica Especial</option><option>Hiden (Técnica de Clã)</option></select></div>
+    </div>
+    <div class="field"><label>Nível Atual</label><input type="number" id="asp-nivel" value="1" min="1"></div>
+    <div class="field"><label>Descrição / Benefícios</label><textarea id="asp-desc" rows="5"></textarea></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal('modal-aspecto')">Cancelar</button><button class="btn" onclick="saveAspecto()">Salvar</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-item">
+  <div class="modal">
+    <h3>🎒 Adicionar Item</h3>
+    <div class="field"><label>Nome</label><input type="text" id="i-nome"></div>
+    <div class="grid3">
+      <div class="field"><label>Quantidade</label><input type="number" id="i-qty" value="1" min="0"></div>
+      <div class="field"><label>Peso (kg)</label><input type="number" id="i-peso" value="0" min="0" step="0.1"></div>
+      <div class="field"><label>Categoria</label><select id="i-cat"><option>Arma</option><option>Armadura</option><option>Ferramenta</option><option>Consumível</option><option>Pergaminho</option><option>Equipamento</option><option>Tesouro</option><option>Outro</option></select></div>
+    </div>
+    <div class="field"><label>Descrição</label><textarea id="i-desc" rows="3"></textarea></div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal('modal-item')">Cancelar</button><button class="btn" onclick="saveItem()">Adicionar</button></div>
+  </div>
+</div>
+
+<script>
+let DATA={
+  nome:'',idade:'',nascimento:'',altura:'',peso:'',sangue:'',cla:'',vila:'',posto:'Genin',classe:'',aparencia:'',fama:0,ryo:0,famaTipo:'Poder',conexoes:'',tracos:'',motivacao:'',medos:'',traumas:'',segredos:'',historia:'',photoData:'',
+  hpAtual:30,hpMax:30,chAtual:50,chMax:50,fadiga:0,vidatemp:0,
+  carisma:3,destreza:3,espirito:3,inteligencia:3,sabedoria:3,vitalidade:3,
+  genjutsu:0,ninjutsu:0,taijutsu:0,
+  xpTotal:0,nivel:1,sessoesNivel:0,xpLog:[],
+  jutsus:[],aspectos:[],itens:[],natures:[],natInata:'',estilos:[],
+  periciasProf:{},periciasEsp:{},
+  equipArma1:'',equipArma2:'',equipArmadura:'',equipAc1:'',equipAc2:'',equipNotas:'',
+  invShuriken:0,invKunai:0,invSenbon:0,invScroll:0,invPilula:0,invOutros:'',
+  tsHistory:[],pendingTS:null,diceHistory:[],theme:'dark',
+};
+
+function saveField(k,v){DATA[k]=v;recalcAll();autoSave();}
+function autoSave(){try{localStorage.setItem('snsficha_v2',JSON.stringify(DATA));}catch(e){}}
+function loadSaved(){try{const s=localStorage.getItem('snsficha_v2')||localStorage.getItem('snsficha');if(s)DATA={...DATA,...JSON.parse(s)};}catch(e){}}
+function exportData(){const b=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`ficha_${DATA.nome||'personagem'}.json`;a.click();URL.revokeObjectURL(u);}
+function importData(){document.getElementById('import-input').click();}
+function handleImport(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{DATA={...DATA,...JSON.parse(ev.target.result)};initAll();alert('✅ Ficha carregada!');}catch(err){alert('❌ Erro ao carregar.');}};r.readAsText(f);e.target.value='';}
+
+function toggleTheme(){const h=document.documentElement;const d=h.dataset.theme==='dark';h.dataset.theme=d?'light':'dark';DATA.theme=h.dataset.theme;document.getElementById('theme-btn').textContent=d?'🌙 Escuro':'☀️ Claro';autoSave();}
+function applyTheme(){const t=DATA.theme||'dark';document.documentElement.dataset.theme=t;document.getElementById('theme-btn').textContent=t==='dark'?'☀️ Claro':'🌙 Escuro';}
+
+function showTab(n,b){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));document.getElementById('panel-'+n).classList.add('active');if(b)b.classList.add('active');}
+
+function updateBar(t){const cE=document.getElementById(t==='hp'?'hp-atual':'ch-atual');const mE=document.getElementById(t==='hp'?'hp-max':'ch-max');const c=parseInt(cE.value)||0;const m=Math.max(1,parseInt(mE.value)||1);document.getElementById('bar-'+t).style.width=Math.max(0,Math.min(100,c/m*100))+'%';if(t==='hp'){DATA.hpAtual=c;DATA.hpMax=m;}else{DATA.chAtual=c;DATA.chMax=m;}autoSave();}
+function adjRes(t,d){const cE=document.getElementById(t==='hp'?'hp-atual':'ch-atual');const m=parseInt(document.getElementById(t==='hp'?'hp-max':'ch-max').value)||1;cE.value=Math.max(0,Math.min(m,(parseInt(cE.value)||0)+d));updateBar(t);}
+
+const MA=[{key:'carisma',label:'Carisma'},{key:'destreza',label:'Destreza'},{key:'espirito',label:'Espírito'},{key:'inteligencia',label:'Inteligência'},{key:'sabedoria',label:'Sabedoria'},{key:'vitalidade',label:'Vitalidade'}];
+function renderMainAttrs(){document.getElementById('attrs-main').innerHTML=MA.map(a=>`<div class="stat-box"><div class="stat-label">${a.label}</div><input type="number" value="${DATA[a.key]||0}" min="0" id="attr-${a.key}" oninput="DATA['${a.key}']=parseInt(this.value)||0;recalcAll();autoSave()"></div>`).join('');}
+function renderPoderAttrs(){document.getElementById('attrs-poder').innerHTML=['genjutsu','ninjutsu','taijutsu'].map(k=>`<div class="poder-row"><label>${k.charAt(0).toUpperCase()+k.slice(1)}</label><input type="number" value="${DATA[k]||0}" min="0" oninput="DATA['${k}']=parseInt(this.value)||0;recalcAll();autoSave()"></div>`).join('');}
+function renderSecAttrs(){const dex=parseInt(DATA.destreza)||0;const lvl=parseInt(DATA.nivel)||1;const prof=1+Math.floor(lvl/10);const db=dex<=10?2:dex<=20?4:dex<=30?6:dex<=40?8:10;const sc=[{label:'Iniciativa',val:dex+prof,c:'var(--accent2)'},{label:'Defesa',val:12+dex+prof,c:'var(--success)'},{label:'Deslocamento',val:10+db,c:'var(--gold)'},{label:'C.Chakra',val:(parseInt(DATA.espirito)||0)+(parseInt(DATA.inteligencia)||0),c:'var(--chakra-bright)'}];document.getElementById('attrs-sec').innerHTML=sc.map(s=>`<div class="stat-box"><div class="stat-label">${s.label}</div><div class="stat-value" style="color:${s.c};font-size:22px">${s.val}</div></div>`).join('');}
+
+const NM={'Katon':'katon','Fuuton':'fuuton','Raiton':'raiton','Doton':'doton','Suiton':'suiton','Yin':'yin','Yang':'yang'};
+function getNC(n){for(const k of Object.keys(NM))if(n.includes(k))return NM[k];return 'other';}
+function renderNatures(){const c=document.getElementById('natures-container');if(!DATA.natures||!DATA.natures.length){c.innerHTML='<span class="text-muted">Nenhuma natureza.</span>';return;}c.innerHTML=DATA.natures.map((n,i)=>`<span class="nature-tag nature-${getNC(n.name)} level${n.level}">${n.name}<span class="level-indicator">N${n.level}</span><span style="margin-left:6px;cursor:pointer;opacity:.6" onclick="removeNature(${i})">×</span></span>`).join('');}
+function addNature(){let s=document.getElementById('nat-sel').value;if(!s)return;if(s==='custom'){s=prompt('Nome da natureza:');if(!s)return;}const lv=parseInt(document.getElementById('nat-level').value)||1;const ex=DATA.natures.find(n=>n.name===s);if(ex)ex.level=lv;else DATA.natures.push({name:s,level:lv});renderNatures();autoSave();}
+function removeNature(i){DATA.natures.splice(i,1);renderNatures();autoSave();}
+
+function renderEstilos(){const c=document.getElementById('estilos-list');if(!DATA.estilos||!DATA.estilos.length){c.innerHTML='<div class="text-muted">Nenhum estilo.</div>';return;}c.innerHTML=DATA.estilos.map((e,i)=>`<div class="flex-between mb8" style="background:var(--surface3);border-radius:4px;padding:8px 12px"><div><span style="font-weight:600">${e.name}</span><span class="text-muted" style="margin-left:8px;font-size:12px">Nv.${e.level}</span></div><div class="flex gap8"><button class="btn btn-sm btn-ghost" onclick="evolveEstilo(${i})">+Nv</button><button class="btn btn-sm btn-danger" onclick="removeEstilo(${i})">×</button></div></div>`).join('');}
+function addEstilo(){const n=document.getElementById('estilo-sel').value;if(!n)return;const lv=parseInt(document.getElementById('estilo-lvl').value)||1;const ex=DATA.estilos.find(e=>e.name===n);if(ex)ex.level=Math.max(ex.level,lv);else DATA.estilos.push({name:n,level:lv});renderEstilos();autoSave();}
+function evolveEstilo(i){DATA.estilos[i].level++;renderEstilos();autoSave();}
+function removeEstilo(i){DATA.estilos.splice(i,1);renderEstilos();autoSave();}
+
+const PER=[{name:'Acrobacia',attr:'destreza'},{name:'Atletismo',attr:'vitalidade'},{name:'Atuação',attr:'carisma'},{name:'Blefar',attr:'carisma'},{name:'Burocracia',attr:'inteligencia'},{name:'Ciências Médicas',attr:'inteligencia'},{name:'Consciência de Chakra',attr:'espirito'},{name:'Conexões',attr:'carisma'},{name:'Conhecimento da Terra',attr:'inteligencia'},{name:'Controle de Chakra',attr:'espirito'},{name:'Direito',attr:'inteligencia'},{name:'Força',attr:'vitalidade'},{name:'Furtividade',attr:'destreza'},{name:'História',attr:'inteligencia'},{name:'Intuição',attr:'sabedoria'},{name:'Intimidação',attr:'carisma'},{name:'Investigação',attr:'inteligencia'},{name:'Jogos',attr:'inteligencia'},{name:'Liberação',attr:'sabedoria'},{name:'Linguagem',attr:'inteligencia'},{name:'Manipulação',attr:'carisma'},{name:'Medicina',attr:'inteligencia'},{name:'Meditação',attr:'sabedoria'},{name:'Percepção',attr:'sabedoria'},{name:'Persuasão',attr:'carisma'},{name:'Religião',attr:'inteligencia'},{name:'Rituais',attr:'sabedoria'},{name:'Sin.c/Criaturas',attr:'carisma'},{name:'Sobrevivência',attr:'sabedoria'},{name:'Tecnologia',attr:'inteligencia'}];
+function renderPericias(){const lvl=parseInt(DATA.nivel)||1;const prof=1+Math.floor(lvl/10);document.getElementById('peri-body').innerHTML=PER.map(p=>{const av=parseInt(DATA[p.attr])||0;const pr=DATA.periciasProf&&DATA.periciasProf[p.name];const esp=DATA.periciasEsp&&DATA.periciasEsp[p.name];let b=av+(pr?prof:0)+(esp?prof:0);return`<tr><td>${p.name}</td><td style="color:var(--text-dim);font-size:11px">${p.attr.substring(0,3).toUpperCase()}</td><td><input type="checkbox" class="peri-check" ${pr?'checked':''} onchange="togglePericia('${p.name}','prof',this.checked)"></td><td><input type="checkbox" class="peri-check" ${esp?'checked':''} onchange="togglePericia('${p.name}','esp',this.checked)"></td><td class="peri-bonus">${b>=0?'+':''}${b}</td></tr>`;}).join('');}
+function togglePericia(n,t,v){if(t==='prof'){if(!DATA.periciasProf)DATA.periciasProf={};if(v)DATA.periciasProf[n]=true;else delete DATA.periciasProf[n];}else{if(!DATA.periciasEsp)DATA.periciasEsp={};if(v)DATA.periciasEsp[n]=true;else delete DATA.periciasEsp[n];}renderPericias();autoSave();}
+
+// XP por sessão = Nível × 4
+// Sessões para subir: Nv1-40 = 1, Nv41-70 = 2, Nv71-90 = 3, Nv91-99 = 4, Nv100 = 5
+function sessoesParaSubir(nivel){
+  if(nivel<=40)return 1;
+  if(nivel<=70)return 2;
+  if(nivel<=90)return 3;
+  if(nivel<=99)return 4;
+  return 5;
+}
+function xpPorSessao(nivel){return nivel*4;}
+const XPT=[];for(let i=1;i<=100;i++)XPT.push({nivel:i,xpSessao:i*4,sessoes:sessoesParaSubir(i)});
+
+function calcNivel(){
+  const lvl=parseInt(DATA.nivel)||1;
+  const sessAtu=parseInt(DATA.sessoesNivel)||0;
+  const sN=sessoesParaSubir(lvl);
+  const pct=Math.min(100,sessAtu/sN*100);
+  document.getElementById('level-display').textContent=lvl;
+  document.getElementById('xp-total-display').textContent=DATA.xpTotal||0;
+  document.getElementById('xp-por-sessao').textContent=xpPorSessao(lvl);
+  document.getElementById('sessoes-needed').textContent=sN;
+  document.getElementById('sessoes-atual-display').textContent=sessAtu;
+  document.getElementById('xp-bar').style.width=pct+'%';
+  document.getElementById('xp-info-text').textContent=`${sessAtu}/${sN} sessões → Nível ${lvl+1}`;
+  // Show level-up button if sessions complete
+  const btnLvl=document.getElementById('btn-levelup');
+  if(btnLvl)btnLvl.style.display=(sessAtu>=sN&&lvl<100)?'block':'none';
+  // Update card level
+  const cardLvl=document.getElementById('card-level');
+  if(cardLvl)cardLvl.textContent=lvl;
+  const pr=1+Math.floor(lvl/10);
+  const pe=document.getElementById('prof-display');
+  if(pe)pe.textContent='+'+pr;
+  const ce=document.getElementById('cc-total');
+  if(ce)ce.textContent=(parseInt(DATA.espirito)||0)+(parseInt(DATA.inteligencia)||0);
+  renderLevelTable();renderSecAttrs();renderPericias();
+}
+
+function adjSessoes(d){
+  DATA.sessoesNivel=Math.max(0,(parseInt(DATA.sessoesNivel)||0)+d);
+  calcNivel();autoSave();
+}
+
+function levelUp(){
+  const lvl=parseInt(DATA.nivel)||1;
+  if(lvl>=100)return;
+  DATA.nivel=lvl+1;
+  DATA.sessoesNivel=0;
+  DATA.xpLog.unshift({qty:0,desc:`⬆️ Subiu para Nível ${lvl+1}!`,date:now()});
+  renderXPLog();calcNivel();
+  document.getElementById('btn-levelup').style.display='none';
+  showXPMsg(`🎉 Bem-vindo ao Nível ${lvl+1}!`,'s');
+  autoSave();
+}
+function addXP(){const q=parseInt(document.getElementById('xp-add-qty').value)||0;const d=document.getElementById('xp-add-desc').value||'Gasto de XP';if(!q){showXPMsg('⚠️ Insira uma quantidade.','d');return;}if(q>(DATA.xpTotal||0)){showXPMsg('⚠️ XP insuficiente!','d');return;}DATA.xpTotal-=q;DATA.xpLog.unshift({qty:-q,desc:d,date:now()});calcNivel();renderXPLog();document.getElementById('xp-add-qty').value='';document.getElementById('xp-add-desc').value='';showXPMsg('✅ −'+q+' XP: '+d,'s');autoSave();}
+function gainXP(){const q=parseInt(document.getElementById('xp-add-qty').value)||0;const d=document.getElementById('xp-add-desc').value||'XP ganho';if(!q){showXPMsg('⚠️ Insira uma quantidade.','d');return;}DATA.xpTotal=(DATA.xpTotal||0)+q;DATA.xpLog.unshift({qty:q,desc:d,date:now()});calcNivel();renderXPLog();document.getElementById('xp-add-qty').value='';document.getElementById('xp-add-desc').value='';showXPMsg('⭐ +'+q+' XP: '+d,'s');autoSave();}
+function encerrarSessao(){
+  const lvl=parseInt(DATA.nivel)||1;
+  const xg=xpPorSessao(lvl);
+  // Check bonus XP test
+  const roll=parseInt(document.getElementById('sess-sab-roll').value)||0;
+  const cd=parseInt(document.getElementById('sess-sab-cd').value)||15;
+  let bonus=0;let bonusMsg='';
+  if(roll>0){
+    if(roll>=cd){bonus=xg;bonusMsg=`✅ Teste passou (${roll} ≥ CD ${cd})! Bônus: +${bonus} XP!`;}
+    else{bonusMsg=`❌ Teste falhou (${roll} < CD ${cd}). Sem bônus.`;}
+  }
+  const total=xg+bonus;
+  DATA.xpTotal=(DATA.xpTotal||0)+total;
+  DATA.sessoesNivel=(parseInt(DATA.sessoesNivel)||0)+1;
+  DATA.xpLog.unshift({qty:total,desc:`Sessão encerrada (Nv${lvl})${bonus>0?' + bônus!':''}`,date:now()});
+  calcNivel();renderXPLog();
+  document.getElementById('sess-sab-roll').value='';
+  const bm=document.getElementById('sess-bonus-msg');
+  if(bm){bm.textContent=bonusMsg;setTimeout(()=>{bm.textContent='';},5000);}
+  showXPMsg(`🎯 +${total} XP${bonus>0?' (c/ bônus)':''}`, 's');
+  autoSave();
+}
+function setXP(v){document.getElementById('xp-add-qty').value=v;}
+function showXPMsg(m,t){const el=document.getElementById('xp-msg');el.textContent=m;el.className=t==='d'?'text-danger':'text-success';setTimeout(()=>{el.textContent='';el.className='';},4000);}
+function renderXPLog(){const c=document.getElementById('xp-log-list');if(!DATA.xpLog||!DATA.xpLog.length){c.innerHTML='<div class="xp-entry"><span class="xp-desc text-muted">Nenhum registro.</span></div>';return;}c.innerHTML=DATA.xpLog.slice(0,60).map(e=>`<div class="xp-entry"><span class="xp-date">${e.date||''}</span><span class="xp-desc">${e.desc}</span><span class="xp-amount" style="color:${(e.qty||0)>0?'var(--success)':(e.qty||0)<0?'var(--danger)':'var(--text-dim)'}">${(e.qty||0)>0?'+':''}${e.qty||'—'}</span></div>`).join('');}
+function renderLevelTable(){const lvl=parseInt(DATA.nivel)||1;document.getElementById('level-ref-body').innerHTML=XPT.slice(0,Math.min(lvl+5,100)).map(r=>`<tr style="${r.nivel===lvl?'background:rgba(58,123,213,.15);color:var(--accent2)':''}"><td style="font-family:'Share Tech Mono'">${r.nivel}${r.nivel===lvl?' ◀':''}</td><td>${r.xpSessao}</td><td>${r.sessoes}</td></tr>`).join('');}
+
+/* DICE */
+function rollDie(sides){
+  const qty=Math.max(1,parseInt(document.getElementById('dice-qty').value)||1);
+  const mod=parseInt(document.getElementById('dice-mod').value)||0;
+  const adv=document.getElementById('dice-adv').value;
+  const label=document.getElementById('dice-label').value||`${qty}d${sides}`;
+  let r1=[],r2=[];
+  for(let i=0;i<qty;i++)r1.push(Math.floor(Math.random()*sides)+1);
+  if(adv!=='normal')for(let i=0;i<qty;i++)r2.push(Math.floor(Math.random()*sides)+1);
+  let used=r1,advTxt='';
+  if(adv==='vantagem'){const s1=r1.reduce((a,b)=>a+b,0),s2=r2.reduce((a,b)=>a+b,0);if(s2>s1)used=r2;advTxt=` [Vantagem: ${r1.join(',')} vs ${r2.join(',')}]`;}
+  else if(adv==='desvantagem'){const s1=r1.reduce((a,b)=>a+b,0),s2=r2.reduce((a,b)=>a+b,0);if(s2<s1)used=r2;advTxt=` [Desv: ${r1.join(',')} vs ${r2.join(',')}]`;}
+  const base=used.reduce((a,b)=>a+b,0);const total=base+mod;
+  const n20=sides===20&&qty===1&&adv==='normal'&&used[0]===20;
+  const n1=sides===20&&qty===1&&adv==='normal'&&used[0]===1;
+  const mEl=document.getElementById('dice-result-main');
+  mEl.className='dice-result-main result-animate';
+  mEl.style.color=n20?'#ffd700':n1?'var(--danger)':'var(--gold)';
+  mEl.textContent=total;
+  let det=`${label}: [${used.join(' + ')}] = ${base}`;
+  if(n20)det+=' ⭐ NAT 20!';if(n1)det+=' ☠ NAT 1!';det+=advTxt;
+  document.getElementById('dice-result-detail').textContent=det;
+  document.getElementById('dice-result-mod').textContent=mod!==0?`Modificador: ${mod>=0?'+':''}${mod} → Total: ${total}`:'';
+  const entry={text:`${label}${adv!=='normal'?' ('+adv+')':''}`,result:total,detail:`[${used.join(',')}]${mod?`+${mod}`:''}`,nat20:n20,nat1:n1,date:now()};
+  if(!DATA.diceHistory)DATA.diceHistory=[];DATA.diceHistory.unshift(entry);if(DATA.diceHistory.length>50)DATA.diceHistory.pop();
+  renderDiceHistory();autoSave();
+  setTimeout(()=>{mEl.className='dice-result-main';},400);
+}
+function rollCustom(){const s=parseInt(prompt('Quantas faces? (ex: 30, 50, 1000)')||'0');if(!s||s<2){alert('Número inválido.');return;}rollDie(s);}
+function rollFormula(){
+  const f=document.getElementById('formula-input').value.trim();
+  const bonus=parseInt(document.getElementById('formula-bonus').value)||0;
+  const adv=document.getElementById('formula-adv').value;
+  if(!f){alert('Insira uma fórmula. Ex: 3d6+4');return;}
+  const m=f.match(/^(\d+)d(\d+)([+-]\d+)?$/i);
+  if(!m){document.getElementById('formula-result').innerHTML=`<div style="color:var(--danger);text-align:center">Fórmula inválida. Use: NdX ou NdX±mod</div>`;return;}
+  const qty=parseInt(m[1]),sides=parseInt(m[2]),fMod=(parseInt(m[3])||0)+bonus;
+  let r1=[],r2=[];
+  for(let i=0;i<qty;i++)r1.push(Math.floor(Math.random()*sides)+1);
+  if(adv!=='normal')for(let i=0;i<qty;i++)r2.push(Math.floor(Math.random()*sides)+1);
+  let used=r1,advTxt='';
+  if(adv==='vantagem'){const s1=r1.reduce((a,b)=>a+b,0),s2=r2.reduce((a,b)=>a+b,0);if(s2>s1)used=r2;advTxt=`\n[Vantagem: ${r1.join(',')} vs ${r2.join(',')}]`;}
+  else if(adv==='desvantagem'){const s1=r1.reduce((a,b)=>a+b,0),s2=r2.reduce((a,b)=>a+b,0);if(s2<s1)used=r2;advTxt=`\n[Desv: ${r1.join(',')} vs ${r2.join(',')}]`;}
+  const base=used.reduce((a,b)=>a+b,0),total=base+fMod;
+  document.getElementById('formula-result').innerHTML=`<div class="dice-result-main result-animate" style="font-size:32px">${total}</div><div class="dice-result-detail">${f}${bonus?`+${bonus}`:''}: [${used.join(' + ')}] = ${base}${fMod?` ${fMod>=0?'+':'-'} ${Math.abs(fMod)}`:''} ${advTxt}</div>`;
+  const entry={text:f+(bonus?`+${bonus}`:''),result:total,detail:`[${used.join(',')}]`,nat20:false,nat1:false,date:now()};
+  if(!DATA.diceHistory)DATA.diceHistory=[];DATA.diceHistory.unshift(entry);renderDiceHistory();autoSave();
+}
+function renderDiceHistory(){const c=document.getElementById('dice-history');if(!DATA.diceHistory||!DATA.diceHistory.length){c.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:13px">Nenhuma rolagem.</div>';return;}c.innerHTML=DATA.diceHistory.slice(0,30).map(e=>`<div class="dice-history-entry"><span style="flex:1;${e.nat20?'color:var(--gold);font-weight:700':e.nat1?'color:var(--danger)':''}">${e.text} → <strong>${e.result}</strong> ${e.detail} ${e.nat20?'⭐':''} ${e.nat1?'☠':''}</span><span style="color:var(--text-dim);font-size:10px">${e.date||''}</span></div>`).join('');}
+function clearDiceHistory(){DATA.diceHistory=[];document.getElementById('dice-history').innerHTML='<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:13px">Histórico limpo.</div>';autoSave();}
+
+let jF='';
+function filterJutsu(f){jF=f;renderJutsus();}
+function renderJutsus(){const c=document.getElementById('jutsu-list');if(!DATA.jutsus||!DATA.jutsus.length){c.innerHTML='<div class="text-muted" style="text-align:center;padding:40px">Nenhum jutsu.</div>';document.getElementById('jutsu-count').textContent=0;refreshJutsuDmgSel();return;}const fil=jF?DATA.jutsus.filter(j=>j.rank===jF||j.tipo===jF):DATA.jutsus;document.getElementById('jutsu-count').textContent=DATA.jutsus.length;if(!fil.length){c.innerHTML='<div class="text-muted" style="text-align:center;padding:40px">Nenhum resultado.</div>';refreshJutsuDmgSel();return;}c.innerHTML=fil.map(j=>{const i=DATA.jutsus.indexOf(j);return`<div class="skill-item"><span class="rank-badge rank-${j.rank}">${j.rank}</span><div class="skill-info"><div class="skill-name">${j.nome}${j.nivel>1?` <span style="color:var(--gold);font-size:11px">Nv.${j.nivel}</span>`:''}</div><div class="skill-meta">${j.tipo} • Chakra: ${j.chakra||'?'} • ${j.natureza||''}</div>${j.req?`<div class="skill-meta">Req: ${j.req}</div>`:''}${j.desc?`<div class="skill-desc">${j.desc}</div>`:''}${j.notas?`<div class="skill-desc" style="color:var(--gold);font-style:italic">📝 ${j.notas}</div>`:''}</div><div class="flex gap8"><button class="btn btn-sm btn-ghost" onclick="evolveJutsu(${i})">+Nv</button><button class="btn btn-sm btn-danger" onclick="removeJutsu(${i})">×</button></div></div>`;}).join('');refreshJutsuDmgSel();}
+function saveJutsu(){DATA.jutsus.push({nome:document.getElementById('j-nome').value||'Sem nome',rank:document.getElementById('j-rank').value,tipo:document.getElementById('j-tipo').value,chakra:document.getElementById('j-chakra').value,nivel:parseInt(document.getElementById('j-nivel').value)||1,natureza:document.getElementById('j-natureza').value,req:document.getElementById('j-req').value,desc:document.getElementById('j-desc').value,notas:document.getElementById('j-notas').value});renderJutsus();closeModal('modal-jutsu');['j-nome','j-chakra','j-natureza','j-req','j-desc','j-notas'].forEach(id=>document.getElementById(id).value='');document.getElementById('j-nivel').value=1;autoSave();}
+function evolveJutsu(i){DATA.jutsus[i].nivel++;renderJutsus();autoSave();}
+function removeJutsu(i){if(confirm('Remover jutsu?')){DATA.jutsus.splice(i,1);renderJutsus();autoSave();}}
+
+function renderAspectos(){const c=document.getElementById('aspectos-list');if(!DATA.aspectos||!DATA.aspectos.length){c.innerHTML='<div class="text-muted" style="grid-column:1/-1;text-align:center;padding:40px">Nenhum aspecto.</div>';document.getElementById('asp-simples-count').textContent=0;document.getElementById('asp-avancados-count').textContent=0;return;}document.getElementById('asp-simples-count').textContent=DATA.aspectos.filter(a=>a.tipo==='simples').length;document.getElementById('asp-avancados-count').textContent=DATA.aspectos.filter(a=>a.tipo==='avancado').length;c.innerHTML=DATA.aspectos.map((a,i)=>`<div class="aspect-card ${a.tipo==='avancado'?'advanced':''}"><div class="asp-type">${a.cat} • ${a.tipo==='avancado'?'Avançado':'Simples'} • Nível ${a.nivel}</div><div class="asp-name">${a.nome}</div>${a.desc?`<div style="font-size:13px;line-height:1.5;color:var(--text)">${a.desc}</div>`:''}<div class="flex gap8" style="margin-top:10px"><button class="btn btn-sm btn-ghost" onclick="evolveAspecto(${i})">+ Evoluir</button><button class="btn btn-sm btn-danger" onclick="removeAspecto(${i})">×</button></div></div>`).join('');}
+function saveAspecto(){DATA.aspectos.push({nome:document.getElementById('asp-nome').value||'Sem nome',tipo:document.getElementById('asp-tipo').value,cat:document.getElementById('asp-cat').value,nivel:parseInt(document.getElementById('asp-nivel').value)||1,desc:document.getElementById('asp-desc').value});renderAspectos();closeModal('modal-aspecto');['asp-nome','asp-desc'].forEach(id=>document.getElementById(id).value='');document.getElementById('asp-nivel').value=1;autoSave();}
+function evolveAspecto(i){DATA.aspectos[i].nivel++;renderAspectos();autoSave();}
+function removeAspecto(i){if(confirm('Remover aspecto?')){DATA.aspectos.splice(i,1);renderAspectos();autoSave();}}
+
+function renderInventario(){const c=document.getElementById('inv-list');if(!DATA.itens||!DATA.itens.length){c.innerHTML='<div class="text-muted" style="text-align:center;padding:30px">Inventário vazio.</div>';return;}c.innerHTML=DATA.itens.map((it,i)=>`<div class="inv-item"><div class="inv-qty">${it.qty}</div><div style="flex:1"><div style="font-weight:600">${it.nome}</div><div style="font-size:12px;color:var(--text-dim)">${it.cat}${it.desc?' • '+it.desc:''}</div></div><div style="font-size:11px;color:var(--text-dim);width:40px;text-align:right">${it.peso}kg</div><div class="flex gap8"><button class="btn btn-sm btn-ghost" onclick="adjItem(${i},1)">+</button><button class="btn btn-sm btn-ghost" onclick="adjItem(${i},-1)">−</button><button class="btn btn-sm btn-danger" onclick="removeItem(${i})">×</button></div></div>`).join('');}
+function saveItem(){DATA.itens.push({nome:document.getElementById('i-nome').value||'Item',qty:parseInt(document.getElementById('i-qty').value)||1,peso:parseFloat(document.getElementById('i-peso').value)||0,cat:document.getElementById('i-cat').value,desc:document.getElementById('i-desc').value});renderInventario();closeModal('modal-item');['i-nome','i-desc'].forEach(id=>document.getElementById(id).value='');document.getElementById('i-qty').value=1;document.getElementById('i-peso').value=0;autoSave();}
+function adjItem(i,d){DATA.itens[i].qty=Math.max(0,DATA.itens[i].qty+d);if(DATA.itens[i].qty===0&&confirm('Remover item?'))DATA.itens.splice(i,1);renderInventario();autoSave();}
+function removeItem(i){if(confirm('Remover?')){DATA.itens.splice(i,1);renderInventario();autoSave();}}
+
+function selectTS(el){document.querySelectorAll('.ts-option').forEach(e=>e.classList.remove('selected'));el.classList.add('selected');}
+function calcTimeskip(){const type=document.querySelector('.ts-option.selected')?.dataset.type||'treino';const durVal=parseInt(document.getElementById('ts-dur-valor').value)||1;const durUnidade=document.getElementById('ts-dur-unidade').value;const intens=document.getElementById('ts-intensidade').value;const foco=document.getElementById('ts-foco').value||'treinamento geral';const det=document.getElementById('ts-detalhes').value;
+const multMap={dias:1,semanas:7,meses:30,anos:365};const dias=durVal*(multMap[durUnidade]||1);
+const unLabel=durVal===1?durUnidade.replace(/s$/,''):durUnidade;const durLabel=`${durVal} ${unLabel}`;
+const lvl=parseInt(DATA.nivel)||1;const bx={leve:1,moderado:2,intenso:4,extremo:7}[intens]||2;const mt={treino:1.2,estudo:1.0,descanso:0.3,missao:1.5,viagem:0.7,social:0.8}[type]||1;const xp=Math.max(1,Math.floor(bx*mt*Math.log2(dias+1)*(1+lvl*.05)));const ev=[];if(type==='treino'){ev.push(`• Progresso em: ${foco}`);if(intens==='intenso'||intens==='extremo')ev.push('• Avanço significativo detectado');if(dias>=30)ev.push('• Compreensão aprofundada do fluxo de chakra');if(intens==='extremo')ev.push('• ⚠ Fadiga acumulada');}else if(type==='missao'){ev.push(`• Missão: ${foco}`);ev.push('• Experiência de combate real');}else if(type==='estudo'){ev.push(`• Estudo: ${foco}`);if(dias>=7)ev.push('• Conhecimento teórico ampliado');}else if(type==='descanso'){ev.push('• HP restaurado');ev.push('• Chakra restaurado');ev.push('• Fadiga zerada');}else if(type==='viagem'){ev.push(`• Viagem: ${foco}`);if(dias>=14)ev.push('• Novas conexões e informações');}else{ev.push(`• Atividade social: ${foco}`);ev.push('• +1d6 Fama potencial');}if(det)ev.push(`• ${det}`);const res=`╔══ TIMESKIP ══╗\nTipo: ${type.toUpperCase()} | ${durLabel} | ${intens.toUpperCase()}\nFoco: ${foco}\n\nRESULTADO:\n${ev.join('\n')}\n\nXP GANHO: +${xp} XP\n(Nível ${lvl} · ${dias} dias · ${intens})${type==='descanso'?'\n\n→ HP, Chakra e Fadiga serão restaurados.':`\n\n→ ${xp} XP serão adicionados.`}`;document.getElementById('ts-result').textContent=res;document.getElementById('ts-apply-btn').style.display='inline-block';document.getElementById('ts-discard-btn').style.display='inline-block';DATA.pendingTS={type,durLabel,intens,foco,xpGanho:xp,isDescanso:type==='descanso'};}
+function applyTimeskip(){if(!DATA.pendingTS)return;const ts=DATA.pendingTS;if(ts.isDescanso){DATA.hpAtual=DATA.hpMax;DATA.chAtual=DATA.chMax;DATA.fadiga=0;document.getElementById('hp-atual').value=DATA.hpMax;document.getElementById('ch-atual').value=DATA.chMax;document.getElementById('fadiga').value=0;updateBar('hp');updateBar('ch');}if(ts.xpGanho>0){DATA.xpTotal=(DATA.xpTotal||0)+ts.xpGanho;DATA.xpLog.unshift({qty:ts.xpGanho,desc:`Timeskip: ${ts.foco} (${ts.durLabel||ts.dur||''})`,date:now()});calcNivel();renderXPLog();}DATA.tsHistory.unshift({...ts,date:now()});renderTSHistory();document.getElementById('ts-apply-btn').style.display='none';document.getElementById('ts-discard-btn').style.display='none';DATA.pendingTS=null;document.getElementById('ts-result').textContent='✅ Timeskip aplicado!';autoSave();}
+function discardTimeskip(){DATA.pendingTS=null;document.getElementById('ts-apply-btn').style.display='none';document.getElementById('ts-discard-btn').style.display='none';document.getElementById('ts-result').textContent='Configure e calcule um timeskip para ver os resultados aqui.';}
+function renderTSHistory(){const c=document.getElementById('ts-history');if(!DATA.tsHistory||!DATA.tsHistory.length){c.innerHTML='<div class="text-muted" style="padding:20px;text-align:center">Nenhum timeskip.</div>';return;}c.innerHTML=DATA.tsHistory.slice(0,20).map(ts=>`<div class="history-entry"><span class="h-time">${ts.date||''}</span><span style="flex:1">${ts.type.toUpperCase()}: ${ts.foco} (${ts.durLabel||ts.dur||''})</span><span class="h-xp">+${ts.xpGanho}XP</span></div>`).join('');}
+
+function descanso(t){const el=document.getElementById('descanso-result');let m='';if(t==='curto'){const r=(Math.floor(Math.random()*10)+1)+(parseInt(DATA.vitalidade)||0);DATA.hpAtual=Math.min(DATA.hpMax,(parseInt(DATA.hpAtual)||0)+r);document.getElementById('hp-atual').value=DATA.hpAtual;updateBar('hp');m=`Curto: +${r} HP.`;}else if(t==='longo'){const h=Math.floor(DATA.hpMax/2),ch=Math.floor(DATA.chMax/2);DATA.hpAtual=Math.min(DATA.hpMax,(parseInt(DATA.hpAtual)||0)+h);DATA.chAtual=Math.min(DATA.chMax,(parseInt(DATA.chAtual)||0)+ch);document.getElementById('hp-atual').value=DATA.hpAtual;document.getElementById('ch-atual').value=DATA.chAtual;updateBar('hp');updateBar('ch');m=`Longo: +${h} HP, +${ch} Chakra.`;}else{DATA.hpAtual=DATA.hpMax;DATA.chAtual=DATA.chMax;DATA.fadiga=0;document.getElementById('hp-atual').value=DATA.hpMax;document.getElementById('ch-atual').value=DATA.chMax;document.getElementById('fadiga').value=0;updateBar('hp');updateBar('ch');m='✅ Completo: Tudo restaurado!';}el.textContent=m;autoSave();}
+
+function updateCard(){
+  const s=id=>document.getElementById(id);
+  const g=k=>DATA[k]||'';
+  if(s('card-nome'))s('card-nome').textContent=g('nome')||'Nome do Ninja';
+  if(s('card-cla'))s('card-cla').textContent=g('cla')?`Clã ${g('cla')}`:'Clã —';
+  if(s('card-vila'))s('card-vila').textContent=g('vila')||'— Vila —';
+  if(s('card-posto'))s('card-posto').textContent=g('posto')||'Genin';
+  if(s('card-classe'))s('card-classe').textContent=g('classe')||'— Classe —';
+  if(s('card-idade'))s('card-idade').textContent=g('idade')||'—';
+  if(s('card-altura'))s('card-altura').textContent=g('altura')||'—';
+  if(s('card-peso'))s('card-peso').textContent=g('peso')||'—';
+  if(s('card-nascimento'))s('card-nascimento').textContent=g('nascimento')||'—';
+  if(s('card-fama'))s('card-fama').textContent=DATA.fama||0;
+  if(s('card-fama-tipo'))s('card-fama-tipo').textContent=g('famaTipo')||'Poder';
+}
+function triggerPhotoUpload(){document.getElementById('photo-input').click();}
+function handlePhoto(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const img=document.getElementById('char-photo-img');
+    const ph=document.getElementById('char-photo-placeholder');
+    img.src=ev.target.result;img.style.display='block';
+    if(ph)ph.style.display='none';
+    DATA.photoData=ev.target.result;autoSave();
+  };
+  r.readAsDataURL(f);e.target.value='';
+}
+function loadPhoto(){
+  if(DATA.photoData){
+    const img=document.getElementById('char-photo-img');
+    const ph=document.getElementById('char-photo-placeholder');
+    if(img){img.src=DATA.photoData;img.style.display='block';}
+    if(ph)ph.style.display='none';
+  }
+}
+function recalcAll(){const cc=(parseInt(DATA.espirito)||0)+(parseInt(DATA.inteligencia)||0);const el=document.getElementById('cc-total');if(el)el.textContent=cc;calcNivel();updateAttrLimits();}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
+
+function now(){const d=new Date();return`${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;}
+
+function populateInputs(){const map={'p-nome':'nome','p-idade':'idade','p-nascimento':'nascimento','p-altura':'altura','p-peso':'peso','p-sangue':'sangue','p-cla':'cla','p-vila':'vila','p-posto':'posto','p-classe':'classe','p-aparencia':'aparencia','p-fama':'fama','p-ryo':'ryo','p-fama-tipo':'famaTipo','p-conexoes':'conexoes','p-tracos':'tracos','p-motivacao':'motivacao','p-medos':'medos','p-traumas':'traumas','p-segredos':'segredos','p-historia':'historia','hp-atual':'hpAtual','hp-max':'hpMax','ch-atual':'chAtual','ch-max':'chMax','fadiga':'fadiga','vidatemp':'vidatemp','nat-inata':'natInata','equip-arma1':'equipArma1','equip-arma2':'equipArma2','equip-armadura':'equipArmadura','equip-ac1':'equipAc1','equip-ac2':'equipAc2','equip-notas':'equipNotas','inv-shuriken':'invShuriken','inv-kunai':'invKunai','inv-senbon':'invSenbon','inv-scroll':'invScroll','inv-pilula':'invPilula','inv-outros':'invOutros'};for(const[id,key]of Object.entries(map)){const el=document.getElementById(id);if(el&&DATA[key]!==undefined)el.value=DATA[key];}updateCard();loadPhoto();}
+
+// ===== TRACKER DE COMBATE =====
+if(!DATA.combatentes)DATA.combatentes=[];
+if(!DATA.rodada)DATA.rodada=1;
+if(!DATA.turnoAtual)DATA.turnoAtual=0;
+if(!DATA.condicoes)DATA.condicoes=[];
+if(!DATA.attrRoll)DATA.attrRoll=[];
+
+const CONDICOES_LIST=[
+  {id:'paralisado',label:'Paralisado',icon:'🔒'},
+  {id:'contido',label:'Contido',icon:'⛓️'},
+  {id:'bloqueio',label:'Bloqueio',icon:'🚫'},
+  {id:'provocar',label:'Provocado',icon:'😡'},
+  {id:'envenenado',label:'Envenenado',icon:'☠️'},
+  {id:'confusao',label:'Confusão',icon:'💫'},
+  {id:'encantado',label:'Encantado',icon:'💜'},
+  {id:'caido',label:'Caído',icon:'⬇️'},
+  {id:'invisivel',label:'Invisível',icon:'👻'},
+  {id:'concentracao',label:'Concentração',icon:'🎯'},
+  {id:'berserk',label:'Berserk',icon:'🔥'},
+  {id:'fadiga_crit',label:'Fadiga Crítica',icon:'💀'},
+];
+
+function renderCondicoes(){
+  // Active tags
+  const atv=document.getElementById('condicoes-ativas');
+  if(atv){
+    if(!DATA.condicoes||!DATA.condicoes.length){
+      atv.innerHTML='<span class="text-muted" style="font-size:12px">Nenhuma condição ativa.</span>';
+    } else {
+      atv.innerHTML=DATA.condicoes.map(id=>{
+        const c=CONDICOES_LIST.find(x=>x.id===id);
+        return c?`<span class="cond-tag" onclick="toggleCondicao('${id}')" title="Clique para remover">${c.icon} ${c.label} ×</span>`:'';
+      }).join('');
+    }
+  }
+  // Buttons grid
+  const grid=document.getElementById('cond-grid');
+  if(grid){
+    grid.innerHTML=CONDICOES_LIST.map(c=>{
+      const ativo=DATA.condicoes&&DATA.condicoes.includes(c.id);
+      return`<div class="cond-btn ${ativo?'ativo':''}" onclick="toggleCondicao('${c.id}')">${c.icon} ${c.label}</div>`;
+    }).join('');
+  }
+}
+function toggleCondicao(id){
+  if(!DATA.condicoes)DATA.condicoes=[];
+  const idx=DATA.condicoes.indexOf(id);
+  if(idx>=0)DATA.condicoes.splice(idx,1);
+  else DATA.condicoes.push(id);
+  renderCondicoes();autoSave();
+}
+
+function addCombatente(){
+  const nome=document.getElementById('comb-nome').value.trim()||'???';
+  const init=parseInt(document.getElementById('comb-init').value)||0;
+  const tipo=document.getElementById('comb-tipo').value;
+  if(!DATA.combatentes)DATA.combatentes=[];
+  DATA.combatentes.push({nome,init,tipo,hp:100,hpMax:100,id:Date.now()});
+  DATA.combatentes.sort((a,b)=>b.init-a.init);
+  document.getElementById('comb-nome').value='';
+  document.getElementById('comb-init').value='';
+  renderCombatentes();autoSave();
+}
+function removeCombatente(id){DATA.combatentes=DATA.combatentes.filter(c=>c.id!==id);renderCombatentes();autoSave();}
+function adjRodada(d){DATA.rodada=Math.max(1,(DATA.rodada||1)+d);document.getElementById('rodada-num').textContent=DATA.rodada;autoSave();}
+function proximoTurno(){
+  if(!DATA.combatentes||!DATA.combatentes.length)return;
+  DATA.turnoAtual=((DATA.turnoAtual||0)+1)%DATA.combatentes.length;
+  if(DATA.turnoAtual===0)adjRodada(1);
+  renderCombatentes();autoSave();
+}
+function resetCombate(){if(!confirm('Resetar combate?'))return;DATA.combatentes=[];DATA.rodada=1;DATA.turnoAtual=0;document.getElementById('rodada-num').textContent=1;renderCombatentes();autoSave();}
+function renderCombatentes(){
+  const c=document.getElementById('combate-lista');
+  if(!DATA.combatentes||!DATA.combatentes.length){
+    c.innerHTML='<div class="text-muted" style="text-align:center;padding:20px">Nenhum combatente. Adicione acima!</div>';return;
+  }
+  c.innerHTML=DATA.combatentes.map((cb,i)=>{
+    const ativo=i===(DATA.turnoAtual||0);
+    const pct=Math.max(0,Math.min(100,(cb.hp/cb.hpMax)*100));
+    const col=pct>50?'var(--success)':pct>25?'var(--gold)':'var(--danger)';
+    return`<div class="combatente-row ${cb.tipo} ${ativo?'ativo':''}">
+      <div class="comb-turn-dot"></div>
+      <div class="comb-init-badge">${cb.init}</div>
+      <div class="comb-nome">${cb.nome}</div>
+      <div class="comb-hp-bar">
+        <button class="btn btn-sm btn-danger" style="padding:2px 6px;font-size:11px" onclick="adjCombHP(${cb.id},-1)">−</button>
+        <input type="number" value="${cb.hp}" style="border-color:${col}" onchange="setCombHP(${cb.id},this.value)">
+        <span style="color:var(--text-dim);font-size:11px">/${cb.hpMax}</span>
+        <button class="btn btn-sm btn-success" style="padding:2px 6px;font-size:11px" onclick="adjCombHP(${cb.id},1)">+</button>
+      </div>
+      <button class="btn btn-sm btn-ghost" onclick="proximoTurno()" title="Próximo turno" style="padding:3px 8px">▶</button>
+      <button class="btn btn-sm btn-danger" onclick="removeCombatente(${cb.id})" style="padding:3px 8px">×</button>
+    </div>`;
+  }).join('');
+}
+function adjCombHP(id,d){
+  const cb=DATA.combatentes.find(c=>c.id===id);
+  if(cb){cb.hp=Math.max(0,Math.min(cb.hpMax,cb.hp+d));renderCombatentes();autoSave();}
+}
+function setCombHP(id,v){
+  const cb=DATA.combatentes.find(c=>c.id===id);
+  if(cb){cb.hp=Math.max(0,Math.min(cb.hpMax,parseInt(v)||0));renderCombatentes();autoSave();}
+}
+
+// ===== CALCULADORA DE DANO =====
+function preencherJutsoDmg(){
+  const sel=document.getElementById('dmg-jutsu-sel');
+  const idx=sel.value;
+  if(!idx&&idx!=='0'){document.getElementById('dmg-chakra').value='';document.getElementById('dmg-formula').value='';return;}
+  const j=DATA.jutsus[parseInt(idx)];
+  if(!j)return;
+  document.getElementById('dmg-chakra').value=j.chakra||'—';
+  document.getElementById('dmg-formula').value=j.desc?j.desc.match(/\d+d\d+/g)?.[0]||'':'';
+}
+function refreshJutsuDmgSel(){
+  const sel=document.getElementById('dmg-jutsu-sel');
+  if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— Escolha um jutsu —</option>'+(DATA.jutsus||[]).map((j,i)=>`<option value="${i}">${j.nome} (${j.rank})</option>`).join('');
+  sel.value=cur;
+}
+function calcularDanoJutsu(){
+  const formula=document.getElementById('dmg-formula').value.trim();
+  const attrSel=document.getElementById('dmg-attr-sel').value;
+  const res=document.getElementById('dmg-result');
+  if(!formula){res.innerHTML='<span style="color:var(--danger)">Insira uma fórmula de dano!</span>';return;}
+  // Parse dice formula
+  const m=formula.match(/(\d+)d(\d+)/i);
+  let total=0,detail='';
+  if(m){
+    const qty=parseInt(m[1]),sides=parseInt(m[2]);
+    const rolls=[];
+    for(let i=0;i<qty;i++)rolls.push(Math.floor(Math.random()*sides)+1);
+    const base=rolls.reduce((a,b)=>a+b,0);
+    const modN=parseInt(formula.replace(/\d+d\d+/i,'').replace(/[^0-9+-]/g,''))||0;
+    const attr=attrSel&&attrSel!=='0'?parseInt(DATA[attrSel])||0:0;
+    total=base+modN+attr;
+    detail=`[${rolls.join('+')}]${modN?`${modN>=0?'+':''}${modN}`:''} ${attr?`+ ${attrSel}(${attr})`:''} = <strong>${total}</strong>`;
+  } else {
+    res.innerHTML='<span style="color:var(--danger)">Fórmula inválida. Use: NdX+mod</span>';return;
+  }
+  res.innerHTML=`<div style="text-align:center">
+    <div style="font-family:'Share Tech Mono';font-size:40px;font-weight:700;color:var(--danger);text-shadow:0 0 12px rgba(224,90,90,.5)">${total}</div>
+    <div style="font-size:12px;color:var(--text-dim);margin-top:4px">${detail}</div>
+  </div>`;
+}
+
+// ===== ROLADOR DE ATRIBUTOS =====
+let attrRollValues=[];
+let attrAssignments={carisma:null,destreza:null,espirito:null,inteligencia:null,sabedoria:null,vitalidade:null};
+let selectedRollIdx=null;
+
+function rolarAtributos(){
+  attrRollValues=[];
+  attrAssignments={carisma:null,destreza:null,espirito:null,inteligencia:null,sabedoria:null,vitalidade:null};
+  selectedRollIdx=null;
+  for(let i=0;i<6;i++){
+    const d=[Math.ceil(Math.random()*4),Math.ceil(Math.random()*4),Math.ceil(Math.random()*4)];
+    d.sort((a,b)=>a-b);const val=d[1]+d[2];
+    attrRollValues.push({val,rolls:d,usado:false});
+  }
+  attrRollValues.sort((a,b)=>b.val-a.val);
+  renderAttrRoller();
+  document.getElementById('attr-roll-result').style.display='block';
+}
+function renderAttrRoller(){
+  const valsDiv=document.getElementById('attr-roll-vals');
+  valsDiv.innerHTML=attrRollValues.map((r,i)=>`
+    <div class="attr-roll-pill ${r.usado?'usado':''} ${selectedRollIdx===i?'selected':''}" 
+         onclick="selectRollVal(${i})" style="${selectedRollIdx===i?'border-color:var(--gold);background:rgba(200,168,64,.15)':''}">
+      <div class="val">${r.val}</div>
+      <div class="det">[${r.rolls[0]},${r.rolls[1]},${r.rolls[2]}]</div>
+    </div>`).join('');
+  const grid=document.getElementById('attr-assign-grid');
+  const attrs=[{k:'carisma',l:'Carisma'},{k:'destreza',l:'Destreza'},{k:'espirito',l:'Espírito'},{k:'inteligencia',l:'Inteligência'},{k:'sabedoria',l:'Sabedoria'},{k:'vitalidade',l:'Vitalidade'}];
+  grid.innerHTML=attrs.map(a=>`
+    <div class="attr-assign-row" onclick="assignAttr('${a.k}')" style="cursor:pointer;${attrAssignments[a.k]!==null?'border:1px solid var(--accent)':''}">
+      <label>${a.l}</label>
+      <div class="av">${attrAssignments[a.k]!==null?attrAssignments[a.k]:'—'}</div>
+    </div>`).join('');
+}
+function selectRollVal(i){
+  if(attrRollValues[i].usado)return;
+  selectedRollIdx=i;renderAttrRoller();
+}
+function assignAttr(key){
+  if(selectedRollIdx===null)return;
+  // Remove old assignment if exists
+  const old=attrAssignments[key];
+  if(old!==null){const prev=attrRollValues.find(r=>r.val===old&&r.usado);if(prev){prev.usado=false;}}
+  attrAssignments[key]=attrRollValues[selectedRollIdx].val;
+  attrRollValues[selectedRollIdx].usado=true;
+  selectedRollIdx=null;
+  renderAttrRoller();
+}
+function aplicarAtributos(){
+  const attrs=Object.keys(attrAssignments);
+  if(attrs.some(k=>attrAssignments[k]===null)){alert('Distribua todos os 6 valores antes de aplicar!');return;}
+  attrs.forEach(k=>{DATA[k]=attrAssignments[k];});
+  renderMainAttrs();recalcAll();autoSave();
+  document.getElementById('attr-roll-result').style.display='none';
+  alert('✅ Atributos aplicados!');
+}
+
+// ===== LEVEL UP ROLLER =====
+let pendingLevelUp={vida:0,chakra:0};
+function rolarLevelUp(){
+  const vit=parseInt(DATA.vitalidade)||0;
+  const esp=parseInt(DATA.espirito)||0;
+  const dv=Math.ceil(Math.random()*10);
+  const dc=Math.ceil(Math.random()*20);
+  pendingLevelUp={vida:dv+vit,chakra:dc+esp,dvRoll:dv,dcRoll:dc};
+  document.getElementById('lu-vida').textContent='+'+pendingLevelUp.vida;
+  document.getElementById('lu-vida-det').textContent=`1d10(${dv}) + Vit(${vit})`;
+  document.getElementById('lu-chakra').textContent='+'+pendingLevelUp.chakra;
+  document.getElementById('lu-chakra-det').textContent=`1d20(${dc}) + Esp(${esp})`;
+  document.getElementById('levelup-result').style.display='block';
+}
+function aplicarLevelUp(){
+  DATA.hpMax=(parseInt(DATA.hpMax)||0)+pendingLevelUp.vida;
+  DATA.hpAtual=Math.min(DATA.hpMax,(parseInt(DATA.hpAtual)||0)+pendingLevelUp.vida);
+  DATA.chMax=(parseInt(DATA.chMax)||0)+pendingLevelUp.chakra;
+  DATA.chAtual=Math.min(DATA.chMax,(parseInt(DATA.chAtual)||0)+pendingLevelUp.chakra);
+  document.getElementById('hp-max').value=DATA.hpMax;
+  document.getElementById('hp-atual').value=DATA.hpAtual;
+  document.getElementById('ch-max').value=DATA.chMax;
+  document.getElementById('ch-atual').value=DATA.chAtual;
+  updateBar('hp');updateBar('ch');
+  DATA.xpLog.unshift({qty:0,desc:`📈 Vida +${pendingLevelUp.vida}, Chakra +${pendingLevelUp.chakra} (Nv${DATA.nivel})`,date:now()});
+  renderXPLog();autoSave();
+  document.getElementById('levelup-result').style.display='none';
+  alert(`✅ Aplicado! +${pendingLevelUp.vida} Vida, +${pendingLevelUp.chakra} Chakra`);
+}
+
+// ===== INDICADOR DE LIMITE DE ATRIBUTOS =====
+function getAttrLimit(nivel){
+  if(nivel<=10)return 15;if(nivel<=20)return 20;if(nivel<=30)return 25;
+  if(nivel<=40)return 30;if(nivel<=50)return 35;if(nivel<=60)return 40;
+  if(nivel<=70)return 45;if(nivel<=80)return 50;if(nivel<=90)return 55;return 60;
+}
+function updateAttrLimits(){
+  const lvl=parseInt(DATA.nivel)||1;const lim=getAttrLimit(lvl);
+  document.querySelectorAll('[id^="attr-"]').forEach(el=>{
+    const val=parseInt(el.value)||0;
+    const box=el.closest('.stat-box');
+    if(!box)return;
+    box.classList.remove('at-limit','near-limit');
+    if(val>=lim)box.classList.add('at-limit');
+    else if(val>=lim-2)box.classList.add('near-limit');
+  });
+  // Update limit display
+  const ld=document.getElementById('attr-limit-display');
+  if(ld)ld.textContent=`Limite atual: ${lim} (Nv ${lvl})`;
+}
+
+// ===== MODO APRESENTAÇÃO =====
+function renderApresentacao(){
+  const lvl=parseInt(DATA.nivel)||1;
+  const prof=1+Math.floor(lvl/10);
+  const lim=getAttrLimit(lvl);
+  const dex=parseInt(DATA.destreza)||0;
+  const db=dex<=10?2:dex<=20?4:dex<=30?6:dex<=40?8:10;
+  const nats=DATA.natures&&DATA.natures.length?DATA.natures.map(n=>`${n.name} N${n.level}`).join(', '):'—';
+  const conds=DATA.condicoes&&DATA.condicoes.length?DATA.condicoes.map(id=>{const c=CONDICOES_LIST.find(x=>x.id===id);return c?`${c.icon}${c.label}`:id;}).join(', '):'Nenhuma';
+  document.getElementById('apresentacao-content').innerHTML=`
+    <div class="apres-header">
+      ${DATA.photoData?`<img src="${DATA.photoData}" style="width:70px;height:86px;object-fit:cover;border-radius:6px;border:2px solid var(--accent)">`:
+        '<div style="width:70px;height:86px;border-radius:6px;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:28px">🥷</div>'}
+      <div style="flex:1">
+        <div style="font-family:\'Cinzel\',serif;font-size:22px;font-weight:700;color:#fff">${DATA.nome||'Sem Nome'}</div>
+        <div style="color:rgba(255,255,255,.6);font-size:12px;margin-top:2px">${DATA.cla||'—'} • ${DATA.vila||'—'} • ${DATA.posto||'Genin'}</div>
+        <div style="color:var(--gold);font-size:11px;margin-top:4px">${DATA.classe||'—'}</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:9px;color:rgba(255,255,255,.5);letter-spacing:2px">NÍVEL</div>
+        <div style="font-family:\'Share Tech Mono\';font-size:44px;font-weight:700;color:var(--gold);line-height:1">${lvl}</div>
+      </div>
+    </div>
+    <div class="apres-body">
+      <div class="apres-section">
+        <div class="apres-section-title">Recursos Vitais</div>
+        <div class="apres-stat-row"><span>❤ Vida</span><span class="apres-stat-val">${DATA.hpAtual}/${DATA.hpMax}</span></div>
+        <div class="apres-stat-row"><span>◈ Chakra</span><span class="apres-stat-val">${DATA.chAtual}/${DATA.chMax}</span></div>
+        <div class="apres-stat-row"><span>⚡ Fadiga</span><span class="apres-stat-val">${DATA.fadiga||0}</span></div>
+        <div class="apres-stat-row"><span>🛡 Defesa</span><span class="apres-stat-val">${12+dex+prof}</span></div>
+        <div class="apres-stat-row"><span>⚡ Iniciativa</span><span class="apres-stat-val">${dex+prof}</span></div>
+        <div class="apres-stat-row"><span>💨 Deslocamento</span><span class="apres-stat-val">${10+db}</span></div>
+        <div class="apres-stat-row"><span>🌀 C.Chakra</span><span class="apres-stat-val">${(parseInt(DATA.espirito)||0)+(parseInt(DATA.inteligencia)||0)}</span></div>
+        <div class="apres-stat-row"><span>⭐ Fama</span><span class="apres-stat-val">${DATA.fama||0} (${DATA.famaTipo||'Poder'})</span></div>
+      </div>
+      <div class="apres-section">
+        <div class="apres-section-title">Atributos (Limite: ${lim})</div>
+        ${['carisma','destreza','espirito','inteligencia','sabedoria','vitalidade'].map(k=>`
+          <div class="apres-stat-row">
+            <span>${k.charAt(0).toUpperCase()+k.slice(1)}</span>
+            <span class="apres-stat-val" style="${(parseInt(DATA[k])||0)>=lim?'color:var(--danger)':''}">${DATA[k]||0}${(parseInt(DATA[k])||0)>=lim?' ⚠':''}</span>
+          </div>`).join('')}
+        <div class="apres-stat-row"><span>Proficiência</span><span class="apres-stat-val">+${prof}</span></div>
+      </div>
+      <div class="apres-section">
+        <div class="apres-section-title">Poder</div>
+        <div class="apres-stat-row"><span>Genjutsu</span><span class="apres-stat-val">${DATA.genjutsu||0}</span></div>
+        <div class="apres-stat-row"><span>Ninjutsu</span><span class="apres-stat-val">${DATA.ninjutsu||0}</span></div>
+        <div class="apres-stat-row"><span>Taijutsu</span><span class="apres-stat-val">${DATA.taijutsu||0}</span></div>
+        <div class="apres-section-title" style="margin-top:10px">Naturezas</div>
+        <div style="font-size:12px;color:var(--text)">${nats}</div>
+      </div>
+      <div class="apres-section">
+        <div class="apres-section-title">Status</div>
+        <div style="font-size:12px;color:var(--danger);margin-bottom:8px">${conds}</div>
+        <div class="apres-section-title">XP & Progressão</div>
+        <div class="apres-stat-row"><span>XP Total</span><span class="apres-stat-val">${DATA.xpTotal||0}</span></div>
+        <div class="apres-stat-row"><span>Sessões no Nível</span><span class="apres-stat-val">${DATA.sessoesNivel||0}/${sessoesParaSubir(lvl)}</span></div>
+        <div class="apres-stat-row"><span>XP/Sessão</span><span class="apres-stat-val">${xpPorSessao(lvl)}</span></div>
+        ${DATA.jutsus&&DATA.jutsus.length?`<div class="apres-section-title" style="margin-top:10px">Jutsus (${DATA.jutsus.length})</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.8">${DATA.jutsus.slice(0,8).map(j=>`${j.rank} ${j.nome}`).join(' · ')}${DATA.jutsus.length>8?` +${DATA.jutsus.length-8} mais`:''}</div>`:''}
+      </div>
+    </div>`;
+}
+
+function initAll(){
+  applyTheme();populateInputs();renderMainAttrs();renderPoderAttrs();renderSecAttrs();
+  renderNatures();renderEstilos();renderPericias();calcNivel();renderXPLog();renderLevelTable();
+  renderJutsus();renderAspectos();renderInventario();renderTSHistory();renderDiceHistory();
+  updateBar('hp');updateBar('ch');updateCard();
+  renderCombatentes();renderCondicoes();refreshJutsuDmgSel();updateAttrLimits();
+}
+
+loadSaved();
+// ensure new fields exist after load
+if(!DATA.combatentes)DATA.combatentes=[];
+if(!DATA.rodada)DATA.rodada=1;
+if(!DATA.turnoAtual)DATA.turnoAtual=0;
+if(!DATA.condicoes)DATA.condicoes=[];
+initAll();
+</script>
+</body>
+</html>
