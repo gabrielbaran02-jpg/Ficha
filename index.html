@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DiceFlow • Rolador de Dados RPG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">RPG Dice Roller</p>
+          <h1>DiceFlow</h1>
+        </div>
+        <button id="themeToggle" class="ghost-btn" aria-label="Alternar tema">🌙</button>
+      </header>
+
+      <main class="card">
+        <section class="dice-shortcuts" aria-label="Tipos de dado">
+          <button class="chip active" data-sides="20">D20</button>
+          <button class="chip" data-sides="4">D4</button>
+          <button class="chip" data-sides="6">D6</button>
+          <button class="chip" data-sides="8">D8</button>
+          <button class="chip" data-sides="10">D10</button>
+          <button class="chip" data-sides="12">D12</button>
+          <button class="chip" data-sides="100">D100</button>
+        </section>
+
+        <section class="board">
+          <div class="die-wrapper">
+            <div id="die" class="die">20</div>
+            <p id="status" class="status">Pronto para rolar 🎲</p>
+          </div>
+
+          <div class="controls">
+            <label>
+              Quantidade
+              <input id="count" type="number" min="1" max="20" value="1" />
+            </label>
+            <label>
+              Lados
+              <input id="sides" type="number" min="2" max="1000" value="20" />
+            </label>
+            <label>
+              Modificador
+              <input id="modifier" type="number" min="-100" max="100" value="0" />
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="rollBtn" class="roll-btn">Rolar</button>
+            <button id="multiBtn" class="ghost-btn">Rolar x10</button>
+          </div>
+
+          <section class="results" aria-live="polite">
+            <div class="result-grid">
+              <article>
+                <h2>Último total</h2>
+                <p id="lastTotal" class="big">-</p>
+              </article>
+              <article>
+                <h2>Média (sessão)</h2>
+                <p id="avg" class="big">-</p>
+              </article>
+              <article>
+                <h2>Críticos (max)</h2>
+                <p id="crit" class="big">0</p>
+              </article>
+            </div>
+            <h3>Histórico</h3>
+            <ul id="history" class="history"></ul>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
