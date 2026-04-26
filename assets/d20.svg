@@ -1,0 +1,20 @@
+<svg width="420" height="420" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <linearGradient id="g" x1="80" y1="30" x2="350" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff6b7e"/>
+      <stop offset="0.45" stop-color="#ff2f45"/>
+      <stop offset="1" stop-color="#911226"/>
+    </linearGradient>
+    <filter id="s" x="0" y="0" width="420" height="420" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#3c0510" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#s)">
+    <path d="M210 18L355 110L379 270L270 392H150L41 270L65 110L210 18Z" fill="url(#g)"/>
+    <path d="M210 18L355 110L379 270L270 392H150L41 270L65 110L210 18Z" stroke="#ffe0e5" stroke-width="8"/>
+
+    <path d="M210 18L210 210M65 110L210 210M355 110L210 210M41 270L210 210M379 270L210 210M150 392L210 210M270 392L210 210" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+    <path d="M65 110L150 392M355 110L270 392M41 270L270 392M379 270L150 392" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>
